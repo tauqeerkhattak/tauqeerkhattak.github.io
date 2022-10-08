@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:web_practice/utils/assets.dart';
 import 'package:web_practice/utils/size_config.dart';
 import 'package:web_practice/widgets/custom_image.dart';
@@ -12,6 +13,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   int imageNo = -1;
+  Color textColor = Colors.black;
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +35,39 @@ class _HomeState extends State<Home> {
                     width: SizeConfig.width,
                     height: SizeConfig.height,
                     child: const ColoredBox(
-                      color: Colors.amber,
+                      color: Colors.grey,
                     ),
                   ),
+          ),
+
+          Positioned(
+            top: 0,
+            child: SizedBox(
+              height: SizeConfig.height,
+              width: SizeConfig.width * 0.5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Tauqeer Ahmed Khattak',
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.courierPrime(
+                      color: textColor,
+                      fontSize: 44,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Text(
+                    '< github.com/tauqeerkhattak />',
+                    style: GoogleFonts.courierPrime(
+                      color: textColor,
+                      fontSize: 25,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
 
           //Image0
@@ -44,10 +76,12 @@ class _HomeState extends State<Home> {
               if (hovering) {
                 setState(() {
                   imageNo = 0;
+                  textColor = const Color(0xfff5e2f6);
                 });
               } else {
                 setState(() {
                   imageNo = -1;
+                  textColor = Colors.black;
                 });
               }
             },
@@ -64,10 +98,12 @@ class _HomeState extends State<Home> {
               if (hovering) {
                 setState(() {
                   imageNo = 1;
+                  textColor = const Color(0xffebebeb);
                 });
               } else {
                 setState(() {
                   imageNo = -1;
+                  textColor = Colors.black;
                 });
               }
             },
@@ -84,10 +120,12 @@ class _HomeState extends State<Home> {
               if (hovering) {
                 setState(() {
                   imageNo = 2;
+                  textColor = const Color(0xff1d3735);
                 });
               } else {
                 setState(() {
                   imageNo = -1;
+                  textColor = Colors.black;
                 });
               }
             },
@@ -105,10 +143,12 @@ class _HomeState extends State<Home> {
               if (hovering) {
                 setState(() {
                   imageNo = 3;
+                  textColor = const Color(0xffe2e2e7);
                 });
               } else {
                 setState(() {
                   imageNo = -1;
+                  textColor = Colors.black;
                 });
               }
             },
@@ -125,10 +165,12 @@ class _HomeState extends State<Home> {
               if (hovering) {
                 setState(() {
                   imageNo = 4;
+                  textColor = const Color(0xfff2f6ed);
                 });
               } else {
                 setState(() {
                   imageNo = -1;
+                  textColor = Colors.black;
                 });
               }
             },
