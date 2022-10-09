@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:web_practice/utils/assets.dart';
 import 'package:web_practice/utils/size_config.dart';
 import 'package:web_practice/widgets/custom_image.dart';
+
+import '../utils/constants.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -42,31 +44,15 @@ class _HomeState extends State<Home> {
 
           Positioned(
             top: 0,
-            child: SizedBox(
-              height: SizeConfig.height,
-              width: SizeConfig.width * 0.5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Tauqeer Ahmed Khattak',
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.courierPrime(
-                      color: textColor,
-                      fontSize: 44,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  Text(
-                    '< github.com/tauqeerkhattak />',
-                    style: GoogleFonts.courierPrime(
-                      color: textColor,
-                      fontSize: 25,
-                    ),
-                  ),
-                ],
-              ),
+            child: _introBox(),
+          ),
+
+          Positioned(
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Center(
+              child: _footerText(),
             ),
           ),
 
@@ -181,6 +167,109 @@ class _HomeState extends State<Home> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _introBox() {
+    return SizedBox(
+      height: SizeConfig.height,
+      width: SizeConfig.width * 0.5,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.all(10),
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: textColor,
+                width: 5,
+              ),
+            ),
+            child: Column(
+              children: [
+                Text(
+                  'Tauqeer Ahmed Khattak',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: textColor,
+                    fontSize: 44,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                InkWell(
+                  onTap: () {
+                    launchUrl(Uri.parse(Constants.githubUri));
+                  },
+                  child: Text(
+                    '< github.com/tauqeerkhattak />',
+                    style: TextStyle(
+                      color: textColor,
+                      fontSize: 25,
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  width: 300,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: Assets.socials.map((social) {
+                      return _buildSocial(social);
+                    }).toList(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSocial(String link) {
+    return InkWell(
+      onTap: () async {
+        String linkToGo = '';
+        switch (link) {
+          case Assets.linkedin:
+            linkToGo = Constants.linkedin;
+            break;
+          case Assets.email:
+            linkToGo = Constants.email;
+            break;
+          case Assets.facebook:
+            linkToGo = Constants.facebook;
+            break;
+        }
+        if (await canLaunchUrl(Uri.parse(linkToGo))) {
+          launchUrl(Uri.parse(linkToGo));
+        }
+      },
+      child: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: textColor,
+          ),
+          shape: BoxShape.circle,
+        ),
+        child: Image.asset(
+          link,
+          height: 30,
+          width: 30,
+          color: textColor,
+        ),
+      ),
+    );
+  }
+
+  Widget _footerText() {
+    return Text(
+      'Made with \u2764 and Flutter',
+      style: TextStyle(
+        fontSize: 18,
+        color: textColor,
       ),
     );
   }

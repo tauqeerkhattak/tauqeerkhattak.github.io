@@ -10,8 +10,12 @@ class WebPractice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Home(),
+    return MaterialApp(
+      title: 'Tauqeer Ahmed',
+      theme: ThemeData(
+        fontFamily: 'CourierPrime',
+      ),
+      home: const Home(),
     );
   }
 }
