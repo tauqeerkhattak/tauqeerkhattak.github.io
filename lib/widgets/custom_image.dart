@@ -6,6 +6,7 @@ import 'package:web_practice/utils/size_config.dart';
 
 class CustomImage extends StatelessWidget {
   final Function(bool) onHover;
+  final VoidCallback onTap;
   final int imageNo;
   final Offset center;
   final double? width;
@@ -13,6 +14,7 @@ class CustomImage extends StatelessWidget {
   const CustomImage({
     Key? key,
     required this.onHover,
+    required this.onTap,
     required this.imageNo,
     required this.center,
     this.width,
@@ -31,7 +33,7 @@ class CustomImage extends StatelessWidget {
           width: width,
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: onTap,
           onHover: onHover,
           child: Image.asset(
             Assets.images[imageNo],

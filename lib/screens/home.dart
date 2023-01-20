@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:web_practice/screens/stars/game_start/game_start.dart';
 import 'package:web_practice/utils/assets.dart';
 import 'package:web_practice/utils/size_config.dart';
 import 'package:web_practice/widgets/custom_image.dart';
@@ -58,6 +59,13 @@ class _HomeState extends State<Home> {
 
           //Image0
           CustomImage(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => const GameStart(),
+                ),
+              );
+            },
             onHover: (hovering) {
               if (hovering) {
                 setState(() {
@@ -80,6 +88,14 @@ class _HomeState extends State<Home> {
 
           //Image1
           CustomImage(
+            onTap: () {
+              ScaffoldMessenger.of(context).showMaterialBanner(
+                const MaterialBanner(
+                  content: Text('in progress'),
+                  actions: [],
+                ),
+              );
+            },
             onHover: (hovering) {
               if (hovering) {
                 setState(() {
@@ -102,6 +118,14 @@ class _HomeState extends State<Home> {
 
           //Image2
           CustomImage(
+            onTap: () {
+              ScaffoldMessenger.of(context).showMaterialBanner(
+                const MaterialBanner(
+                  content: Text('in progress'),
+                  actions: [],
+                ),
+              );
+            },
             onHover: (hovering) {
               if (hovering) {
                 setState(() {
@@ -125,6 +149,14 @@ class _HomeState extends State<Home> {
 
           //Image3
           CustomImage(
+            onTap: () {
+              ScaffoldMessenger.of(context).showMaterialBanner(
+                const MaterialBanner(
+                  content: Text('in progress'),
+                  actions: [],
+                ),
+              );
+            },
             onHover: (hovering) {
               if (hovering) {
                 setState(() {
@@ -147,6 +179,14 @@ class _HomeState extends State<Home> {
 
           //Image4
           CustomImage(
+            onTap: () {
+              ScaffoldMessenger.of(context).showMaterialBanner(
+                const MaterialBanner(
+                  content: Text('in progress'),
+                  actions: [],
+                ),
+              );
+            },
             onHover: (hovering) {
               if (hovering) {
                 setState(() {

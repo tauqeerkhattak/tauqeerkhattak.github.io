@@ -12,9 +12,6 @@ class WebPractice extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Tauqeer Ahmed',
-      theme: ThemeData(
-        fontFamily: 'CourierPrime',
-      ),
       home: const Home(),
     );
   }
