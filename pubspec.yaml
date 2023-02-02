@@ -79,13 +79,6 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  fonts:
-    - family: CourierPrime
-      fonts:
-        - asset: assets/fonts/courier_prime/CourierPrime-Bold.ttf
-        - asset: assets/fonts/courier_prime/CourierPrime-BoldItalic.ttf
-        - asset: assets/fonts/courier_prime/CourierPrime-Italic.ttf
-        - asset: assets/fonts/courier_prime/CourierPrime-Regular.ttf
   # fonts:
   #   - family: Schyler
   #     fonts:

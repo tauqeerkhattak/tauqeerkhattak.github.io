@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:web_practice/screens/stalking_boxes/stalking_boxes.dart';
 import 'package:web_practice/screens/stars/game_start/game_start.dart';
 import 'package:web_practice/utils/assets.dart';
 import 'package:web_practice/utils/size_config.dart';
 import 'package:web_practice/widgets/custom_image.dart';
 
 import '../utils/constants.dart';
+import 'hide_and_seek/hide_and_seek.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -89,11 +92,14 @@ class _HomeState extends State<Home> {
           //Image1
           CustomImage(
             onTap: () {
-              ScaffoldMessenger.of(context).showMaterialBanner(
-                const MaterialBanner(
-                  content: Text('in progress'),
-                  actions: [],
+              Navigator.pushAndRemoveUntil(
+                context,
+                MaterialPageRoute(
+                  builder: (context) {
+                    return const StalkingBoxes();
+                  },
                 ),
+                (route) => false,
               );
             },
             onHover: (hovering) {
@@ -118,14 +124,12 @@ class _HomeState extends State<Home> {
 
           //Image2
           CustomImage(
-            onTap: () {
-              ScaffoldMessenger.of(context).showMaterialBanner(
-                const MaterialBanner(
-                  content: Text('in progress'),
-                  actions: [],
-                ),
-              );
-            },
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HideAndSeek(),
+              ),
+            ),
             onHover: (hovering) {
               if (hovering) {
                 setState(() {
@@ -149,14 +153,7 @@ class _HomeState extends State<Home> {
 
           //Image3
           CustomImage(
-            onTap: () {
-              ScaffoldMessenger.of(context).showMaterialBanner(
-                const MaterialBanner(
-                  content: Text('in progress'),
-                  actions: [],
-                ),
-              );
-            },
+            onTap: _showBanner,
             onHover: (hovering) {
               if (hovering) {
                 setState(() {
@@ -179,14 +176,7 @@ class _HomeState extends State<Home> {
 
           //Image4
           CustomImage(
-            onTap: () {
-              ScaffoldMessenger.of(context).showMaterialBanner(
-                const MaterialBanner(
-                  content: Text('in progress'),
-                  actions: [],
-                ),
-              );
-            },
+            onTap: _showBanner,
             onHover: (hovering) {
               if (hovering) {
                 setState(() {
@@ -207,6 +197,15 @@ class _HomeState extends State<Home> {
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  void _showBanner() {
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('This page is in progress!'),
       ),
     );
   }
@@ -232,10 +231,10 @@ class _HomeState extends State<Home> {
                 Text(
                   'Tauqeer Ahmed Khattak',
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: GoogleFonts.sourceCodePro(
                     color: textColor,
                     fontSize: 44,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 InkWell(
@@ -244,7 +243,7 @@ class _HomeState extends State<Home> {
                   },
                   child: Text(
                     '< github.com/tauqeerkhattak />',
-                    style: TextStyle(
+                    style: GoogleFonts.sourceCodePro(
                       color: textColor,
                       fontSize: 25,
                     ),
@@ -260,6 +259,17 @@ class _HomeState extends State<Home> {
                   ),
                 ),
               ],
+            ),
+          ),
+          const SizedBox(
+            height: 10,
+          ),
+          Text(
+            'Note: Click any picture!',
+            style: GoogleFonts.sourceCodePro(
+              fontWeight: FontWeight.bold,
+              color: textColor,
+              fontSize: 20,
             ),
           ),
         ],
@@ -307,7 +317,7 @@ class _HomeState extends State<Home> {
   Widget _footerText() {
     return Text(
       'Made with \u2764 and Flutter',
-      style: TextStyle(
+      style: GoogleFonts.sourceCodePro(
         fontSize: 18,
         color: textColor,
       ),

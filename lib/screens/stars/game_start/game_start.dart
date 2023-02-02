@@ -19,7 +19,7 @@ class GameStart extends StatelessWidget {
           children: [
             _text('Welcome!'),
             const SizedBox(
-              height: 20,
+              height: 120,
             ),
             GestureDetector(
               onTap: () => Navigator.pushAndRemoveUntil(
@@ -31,7 +31,7 @@ class GameStart extends StatelessWidget {
               child: const Icon(
                 Icons.play_arrow,
                 color: Colors.white,
-                size: 40,
+                size: 100,
               ),
             ),
           ],
@@ -45,7 +45,7 @@ class GameStart extends StatelessWidget {
       text,
       style: GoogleFonts.pressStart2p(
         fontWeight: FontWeight.w200,
-        fontSize: size ?? 25,
+        fontSize: size ?? 40,
         color: Colors.white,
       ),
     );
