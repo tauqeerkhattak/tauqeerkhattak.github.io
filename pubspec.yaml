@@ -37,6 +37,7 @@ dependencies:
   url_launcher: ^6.1.6
   google_fonts: ^3.0.1
   lottie: ^2.1.0
+  intl: ^0.18.0
 
 dev_dependencies:
   flutter_test:

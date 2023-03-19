@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
+  static const silver = Color(0xffaaa9ad);
+  static const sapphire = Color(0xff2D5DA1);
+
   static const boxColors = [
     Colors.purple,
     Colors.blue,

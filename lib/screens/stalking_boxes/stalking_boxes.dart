@@ -52,7 +52,6 @@ class _StalkingBoxesState extends State<StalkingBoxes> {
       }
       return false;
     };
-    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {});
     super.initState();
   }
 

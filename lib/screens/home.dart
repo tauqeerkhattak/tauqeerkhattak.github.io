@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:web_practice/screens/clock_page/clock_page.dart';
 import 'package:web_practice/screens/stalking_boxes/stalking_boxes.dart';
 import 'package:web_practice/screens/stars/game_start/game_start.dart';
 import 'package:web_practice/utils/assets.dart';
@@ -178,7 +179,12 @@ class _HomeState extends State<Home> {
 
           //Image4
           CustomImage(
-            onTap: _showBanner,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ClockPage(),
+              ),
+            ),
             onHover: (hovering) {
               if (hovering) {
                 setState(() {
