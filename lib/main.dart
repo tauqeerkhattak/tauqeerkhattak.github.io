@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:web_practice/screens/home.dart';
 
+import 'utils/assets.dart';
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  //Load style to avoid the lag in Texts.
-  final style = GoogleFonts.pressStart2p();
-  final style1 = GoogleFonts.sourceCodePro();
   runApp(const WebPractice());
 }
 
@@ -15,9 +14,39 @@ class WebPractice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    for (final image in Assets.images) {
+      precacheImage(AssetImage(image), context);
+    }
+    return MaterialApp(
+      theme: _getThemeData(),
       title: 'Tauqeer Ahmed',
-      home: Home(),
+      home: const Home(),
+    );
+  }
+
+  ThemeData _getThemeData() {
+    return ThemeData(
+      textTheme: TextTheme(
+        displayLarge: GoogleFonts.sourceCodePro(
+          fontSize: 44,
+          fontWeight: FontWeight.bold,
+        ),
+        displayMedium: GoogleFonts.sourceCodePro(
+          fontWeight: FontWeight.bold,
+          fontSize: 25,
+        ),
+        displaySmall: GoogleFonts.sourceCodePro(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
+        ),
+        labelSmall: GoogleFonts.sourceCodePro(
+          fontWeight: FontWeight.w100,
+          fontSize: 18,
+        ),
+        bodyLarge: GoogleFonts.pressStart2p(
+          fontWeight: FontWeight.bold,
+        ),
+      ),
     );
   }
 }

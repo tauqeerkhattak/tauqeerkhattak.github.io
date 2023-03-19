@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:web_practice/screens/home.dart';
 
 import '../game_page/game_page.dart';
 
@@ -54,7 +53,6 @@ class GameOver extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-
         child: _text(
           'Play again?',
           20,
@@ -65,12 +63,11 @@ class GameOver extends StatelessWidget {
 
   Widget _homeButton(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const Home(),
-          ),
-          (route) => false),
+      onTap: () {
+        Navigator.pop(context);
+        Navigator.pop(context);
+        Navigator.pop(context);
+      },
       child: Container(
         width: 300,
         padding: const EdgeInsets.all(20),

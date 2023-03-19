@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+
 import '../../../models/obstacles/obstacle_data.dart';
 import '../../../utils/assets.dart';
 import '../game_over/game_over.dart';
@@ -106,14 +107,13 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     _slideController.stop();
     _scaleController.stop();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Navigator.pushAndRemoveUntil(
+      Navigator.push(
         context,
         MaterialPageRoute(
           builder: (context) => GameOver(
             score: score,
           ),
         ),
-        (route) => false,
       );
     });
   }
@@ -138,11 +138,14 @@ class _GamePageState extends State<GamePage> with TickerProviderStateMixin {
     _obstacleController = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 7),
-    )..repeat(
+    );
+    Future.delayed(const Duration(seconds: 2), () {
+      _obstacleController.repeat(
         reverse: false,
         min: 0.0,
         max: 1.0,
       );
+    });
   }
 
   @override

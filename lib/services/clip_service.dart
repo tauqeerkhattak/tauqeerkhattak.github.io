@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class ClipService extends CustomClipper<Path> {
+class ClipService extends CustomClipper<RRect> {
   final Offset center;
   final double? width;
 
@@ -10,20 +10,21 @@ class ClipService extends CustomClipper<Path> {
   });
 
   @override
-  Path getClip(Size size) {
-    Path path = Path();
-    path.addRect(
-      Rect.fromCenter(
-        center: center,
-        width: width ?? 250,
-        height: 150,
-      ),
+  RRect getClip(Size size) {
+    // Path path = Path();
+    // path.addRect(
+    //   ,
+    // );
+    final rect = Rect.fromCenter(
+      center: center,
+      width: width ?? 250,
+      height: 150,
     );
-    return path;
+    return RRect.fromRectAndRadius(rect, const Radius.circular(10));
   }
 
   @override
-  bool shouldReclip(covariant CustomClipper<Path> oldClipper) {
+  bool shouldReclip(covariant CustomClipper<RRect> oldClipper) {
     return false;
   }
 }

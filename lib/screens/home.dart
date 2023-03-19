@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:web_practice/screens/stalking_boxes/stalking_boxes.dart';
 import 'package:web_practice/screens/stars/game_start/game_start.dart';
@@ -8,6 +7,7 @@ import 'package:web_practice/utils/size_config.dart';
 import 'package:web_practice/widgets/custom_image.dart';
 
 import '../utils/constants.dart';
+import 'animated_boxes/animated_boxes.dart';
 import 'hide_and_seek/hide_and_seek.dart';
 
 class Home extends StatefulWidget {
@@ -91,22 +91,19 @@ class _HomeState extends State<Home> {
 
           //Image1
           CustomImage(
-            onTap: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(
-                  builder: (context) {
-                    return const StalkingBoxes();
-                  },
-                ),
-                (route) => false,
-              );
-            },
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return const StalkingBoxes();
+                },
+              ),
+            ),
             onHover: (hovering) {
               if (hovering) {
                 setState(() {
                   imageNo = 1;
-                  textColor = const Color(0xffebebeb);
+                  textColor = Colors.black;
                 });
               } else {
                 setState(() {
@@ -153,7 +150,12 @@ class _HomeState extends State<Home> {
 
           //Image3
           CustomImage(
-            onTap: _showBanner,
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const AnimatedBoxes(),
+              ),
+            ),
             onHover: (hovering) {
               if (hovering) {
                 setState(() {
@@ -211,6 +213,7 @@ class _HomeState extends State<Home> {
   }
 
   Widget _introBox() {
+    final textTheme = Theme.of(context).textTheme;
     return SizedBox(
       height: SizeConfig.height,
       width: SizeConfig.width * 0.5,
@@ -231,10 +234,8 @@ class _HomeState extends State<Home> {
                 Text(
                   'Tauqeer Ahmed Khattak',
                   textAlign: TextAlign.center,
-                  style: GoogleFonts.sourceCodePro(
+                  style: textTheme.displayLarge?.copyWith(
                     color: textColor,
-                    fontSize: 44,
-                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 InkWell(
@@ -243,9 +244,8 @@ class _HomeState extends State<Home> {
                   },
                   child: Text(
                     '< github.com/tauqeerkhattak />',
-                    style: GoogleFonts.sourceCodePro(
+                    style: textTheme.displayMedium?.copyWith(
                       color: textColor,
-                      fontSize: 25,
                     ),
                   ),
                 ),
@@ -266,10 +266,8 @@ class _HomeState extends State<Home> {
           ),
           Text(
             'Note: Click any picture!',
-            style: GoogleFonts.sourceCodePro(
-              fontWeight: FontWeight.bold,
+            style: textTheme.displaySmall?.copyWith(
               color: textColor,
-              fontSize: 20,
             ),
           ),
         ],
@@ -317,10 +315,7 @@ class _HomeState extends State<Home> {
   Widget _footerText() {
     return Text(
       'Made with \u2764 and Flutter',
-      style: GoogleFonts.sourceCodePro(
-        fontSize: 18,
-        color: textColor,
-      ),
+      style: Theme.of(context).textTheme.labelSmall,
     );
   }
 }

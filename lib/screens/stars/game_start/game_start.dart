@@ -22,12 +22,12 @@ class GameStart extends StatelessWidget {
               height: 120,
             ),
             GestureDetector(
-              onTap: () => Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const GamePage(),
-                  ),
-                  (route) => false),
+              onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const GamePage(),
+                ),
+              ),
               child: const Icon(
                 Icons.play_arrow,
                 color: Colors.white,

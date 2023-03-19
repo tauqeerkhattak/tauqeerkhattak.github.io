@@ -1,6 +1,9 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class HideAndSeek extends StatefulWidget {
   const HideAndSeek({Key? key}) : super(key: key);
@@ -16,6 +19,14 @@ class _HideAndSeekState extends State<HideAndSeek> {
   @override
   void initState() {
     super.initState();
+    window.onKeyData = (final keyData) {
+      if (keyData.logical == LogicalKeyboardKey.escape.keyId &&
+          keyData.type == KeyEventType.down) {
+        Navigator.of(context).pop();
+        return true;
+      }
+      return false;
+    };
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       final size = MediaQuery.of(context).size;
       offset = Offset(size.width / 2, size.height / 2);
@@ -29,6 +40,16 @@ class _HideAndSeekState extends State<HideAndSeek> {
       body: Stack(
         children: [
           _buildBox(),
+          Positioned(
+            top: 20,
+            left: 20,
+            child: Text(
+              'Press escape to go back',
+              style: GoogleFonts.pressStart2p(
+                color: Colors.black,
+              ),
+            ),
+          ),
         ],
       ),
     );
@@ -51,18 +72,22 @@ class _HideAndSeekState extends State<HideAndSeek> {
               onTap: () {
                 print('I am clicked!');
               },
-              child: Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: kElevationToShadow[24],
-                ),
-                alignment: Alignment.center,
-                child: const Text(
-                  'Click me!',
-                  style: TextStyle(color: Colors.white),
+              child: PhysicalModel(
+                color: Colors.black,
+                borderRadius: BorderRadius.circular(10),
+                elevation: 10.0,
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.black,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  alignment: Alignment.center,
+                  child: const Text(
+                    'Click me!',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
               ),
             ),
@@ -76,10 +101,14 @@ class _HideAndSeekState extends State<HideAndSeek> {
     final size = MediaQuery.of(context).size;
     int newDx = random.nextInt(size.width.toInt());
     int newDy = random.nextInt(size.height.toInt());
+    double mouseDx = event.position.dx;
+    double mouseDy = event.position.dy;
     bool isPositionInvalid = newDx > size.width - 100 ||
         newDy > size.height - 100 ||
         newDx < 100 ||
-        newDy < 100;
+        newDy < 100 ||
+        (mouseDx - newDx).abs() < 200 ||
+        (mouseDy - newDy).abs() < 200;
     if (isPositionInvalid) {
       return _onEnter(event);
     }

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:web_practice/services/clip_service.dart';
-import 'package:web_practice/services/paint_service.dart';
-import 'package:web_practice/utils/assets.dart';
-import 'package:web_practice/utils/size_config.dart';
+
+import '../utils/assets.dart';
+import '../utils/size_config.dart';
 
 class CustomImage extends StatelessWidget {
   final Function(bool) onHover;
@@ -22,19 +22,22 @@ class CustomImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: PaintService(
+    return ClipRRect(
+      clipBehavior: Clip.hardEdge,
+      clipper: ClipService(
         center: center,
         width: width,
       ),
-      child: ClipPath(
-        clipper: ClipService(
-          center: center,
-          width: width,
-        ),
-        child: InkWell(
-          onTap: onTap,
-          onHover: onHover,
+      child: InkWell(
+        onTap: onTap,
+        onHover: onHover,
+        child: Container(
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.white,
+              width: 2,
+            ),
+          ),
           child: Image.asset(
             Assets.images[imageNo],
             fit: BoxFit.fill,
