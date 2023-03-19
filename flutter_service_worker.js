@@ -3,8 +3,8 @@ const MANIFEST = 'flutter-app-manifest';
 const TEMP = 'flutter-temp-cache';
 const CACHE_NAME = 'flutter-app-cache';
 const RESOURCES = {
-  "index.html": "2faa9336a10e23c5f783a911f391ed09",
-"/": "2faa9336a10e23c5f783a911f391ed09",
+  "index.html": "31f0c2b97865af214bc1a6df718e28cb",
+"/": "31f0c2b97865af214bc1a6df718e28cb",
 "assets/packages/cupertino_icons/assets/CupertinoIcons.ttf": "6d342eb68f170c97609e9da345464e5e",
 "assets/AssetManifest.json": "5faf080041510938fa2f095af4e2b0d5",
 "assets/assets/images/satellite.png": "2f572ea64baf2f35673f752b463862df",
@@ -22,23 +22,26 @@ const RESOURCES = {
 "assets/assets/images/4.jpg": "cde7cad63437e9524ab06302485efce6",
 "assets/assets/images/linkedin.png": "0dfdf900b4949bfe7a038c3121e99376",
 "assets/assets/lottie/rocket.json": "dacc84cc4ddc4f670dae585e4dc42992",
-"assets/NOTICES": "b61f169965a3f6b96b6895c7f330262e",
+"assets/NOTICES": "040723fbed2d4a53e747775963699769",
 "assets/FontManifest.json": "dc3d03800ccca4601324923c0b1d6d57",
 "assets/fonts/MaterialIcons-Regular.otf": "e7069dfd19b331be16bed984668fe080",
 "version.json": "1e639790d4d891b98e68dcd6134dc1ea",
-"main.dart.js": "e828deabcb671358c5f579efef58f54e",
+"main.dart.js": "54e9564980527db516cdcf875c0d5510",
 "canvaskit/canvaskit.js": "97937cb4c2c2073c968525a3e08c86a3",
 "canvaskit/profiling/canvaskit.js": "c21852696bc1cc82e8894d851c01921a",
 "canvaskit/profiling/canvaskit.wasm": "371bc4e204443b0d5e774d64a046eb99",
 "canvaskit/canvaskit.wasm": "3de12d898ec208a5f31362cc00f09b9e",
 "manifest.json": "d40c47d1c161f94dbcb13094d37f1f55",
 "favicon.png": "22779bc2c854e8f7de27ecbadf85930d",
-"flutter.js": "1cfe996e845b3a8a33f57607e8b09ee4",
+"flutter.js": "a85fcf6324d3c4d3ae3be1ae4931e9c5",
 "icons/Icon-192.png": "ac9a721a12bbc803b44f645561ecb1e1",
 "icons/Icon-maskable-512.png": "301a7604d45b3e739efc881eb04896ea",
 "icons/Icon-512.png": "96e752610906ba2a93c65f8abe1645f1",
 "icons/Icon-maskable-192.png": "c457ef57daa1d16f64b27b786ec2ea3c",
-".idea/workspace.xml": "1112005262719b7743dec825127cd86c"
+".idea/modules.xml": "1eb3b065c55895e347308e50cd717dee",
+".idea/web.iml": "d727c2a632366bca02af30b0f290fd69",
+".idea/vcs.xml": "f990e6d29e03715a04983dd2f51d3595",
+".idea/workspace.xml": "562c162571f17d95f7301c5b80eb86c1"
 };
 
 // The application shell files that are downloaded before a service worker can
