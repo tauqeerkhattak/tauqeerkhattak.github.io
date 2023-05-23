@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +16,7 @@ class _TextShadowPageState extends State<TextShadowPage> {
   Offset? mouseOffset;
   StreamController<Offset> shadowStream = StreamController<Offset>();
   StreamController<Offset> positionStream = StreamController<Offset>();
+  final _focusNode = FocusNode();
 
   void _onHover(PointerEvent event) {
     final offsetFromTopLeft = event.position;
@@ -50,24 +50,29 @@ class _TextShadowPageState extends State<TextShadowPage> {
     shadowStream.add(Offset(shadowX, shadowY));
   }
 
+  void onKeyPressed(RawKeyEvent keyEvent) {
+    if (keyEvent.logicalKey == LogicalKeyboardKey.escape) {
+      Navigator.pop(context);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
-    window.onKeyData = (final keyData) {
-      if (keyData.logical == LogicalKeyboardKey.escape.keyId &&
-          keyData.type == KeyEventType.up) {
-        Navigator.of(context).pop();
-        return true;
-      }
-      return false;
-    };
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _focusNode.requestFocus();
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: _buildBody(),
+      body: RawKeyboardListener(
+        focusNode: _focusNode,
+        onKey: onKeyPressed,
+        child: _buildBody(),
+      ),
     );
   }
 

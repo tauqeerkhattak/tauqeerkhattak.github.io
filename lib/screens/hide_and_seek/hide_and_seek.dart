@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,19 +14,19 @@ class HideAndSeek extends StatefulWidget {
 class _HideAndSeekState extends State<HideAndSeek> {
   Offset? offset;
   final random = Random();
+  final _focusNode = FocusNode();
+
+  void onKeyPressed(RawKeyEvent keyEvent) {
+    if (keyEvent.logicalKey == LogicalKeyboardKey.escape) {
+      Navigator.pop(context);
+    }
+  }
 
   @override
   void initState() {
     super.initState();
-    window.onKeyData = (final keyData) {
-      if (keyData.logical == LogicalKeyboardKey.escape.keyId &&
-          keyData.type == KeyEventType.down) {
-        Navigator.of(context).pop();
-        return true;
-      }
-      return false;
-    };
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _focusNode.requestFocus();
       final size = MediaQuery.of(context).size;
       offset = Offset(size.width / 2, size.height / 2);
       setState(() {});
@@ -37,20 +36,24 @@ class _HideAndSeekState extends State<HideAndSeek> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          _buildBox(),
-          Positioned(
-            top: 20,
-            left: 20,
-            child: Text(
-              'Press escape to go back',
-              style: GoogleFonts.pressStart2p(
-                color: Colors.black,
+      body: RawKeyboardListener(
+        focusNode: _focusNode,
+        onKey: onKeyPressed,
+        child: Stack(
+          children: [
+            _buildBox(),
+            Positioned(
+              top: 20,
+              left: 20,
+              child: Text(
+                'Press escape to go back',
+                style: GoogleFonts.pressStart2p(
+                  color: Colors.black,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

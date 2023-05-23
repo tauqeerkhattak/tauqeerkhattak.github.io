@@ -9,7 +9,6 @@ import 'package:web_practice/utils/size_config.dart';
 import 'package:web_practice/widgets/custom_image.dart';
 
 import '../utils/constants.dart';
-import 'animated_boxes/animated_boxes.dart';
 import 'hide_and_seek/hide_and_seek.dart';
 
 class Home extends StatefulWidget {
@@ -210,15 +209,6 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void _showBanner() {
-    ScaffoldMessenger.of(context).clearSnackBars();
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('This page is in progress!'),
-      ),
-    );
-  }
-
   Widget _introBox() {
     final textTheme = Theme.of(context).textTheme;
     return SizedBox(
@@ -322,7 +312,9 @@ class _HomeState extends State<Home> {
   Widget _footerText() {
     return Text(
       'Made with \u2764 and Flutter',
-      style: Theme.of(context).textTheme.labelSmall,
+      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+            color: textColor,
+          ),
     );
   }
 }

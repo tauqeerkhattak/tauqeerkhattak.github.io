@@ -60,9 +60,8 @@ class _StalkingBoxesState extends State<StalkingBoxes> {
   }
 
   void onKeyPressed(RawKeyEvent keyEvent) {
-    print('Pressedddd');
     if (keyEvent.logicalKey == LogicalKeyboardKey.escape) {
-      log('Pressed!');
+      Navigator.pop(context);
     }
   }
 

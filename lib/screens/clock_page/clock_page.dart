@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,12 +30,7 @@ class _ClockPageState extends State<ClockPage> with TickerProviderStateMixin {
   final _oneDay = const Duration(days: 1);
   Timer? _timer;
   bool shouldAdd = true;
-
-  @override
-  void initState() {
-    super.initState();
-    initialize();
-  }
+  final _focusNode = FocusNode();
 
   void initialize() {
     _secondAnimation = AnimationController(
@@ -80,14 +74,21 @@ class _ClockPageState extends State<ClockPage> with TickerProviderStateMixin {
     _secondAnimation.forward(from: seconds);
     _minuteAnimation.forward(from: minutes);
     _hourAnimation.forward(from: hours);
-    window.onKeyData = (final keyData) {
-      if (keyData.logical == LogicalKeyboardKey.escape.keyId &&
-          keyData.type == KeyEventType.up) {
-        Navigator.of(context).pop();
-        return true;
-      }
-      return false;
-    };
+  }
+
+  void onKeyPressed(RawKeyEvent keyEvent) {
+    if (keyEvent.logicalKey == LogicalKeyboardKey.escape) {
+      Navigator.pop(context);
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    initialize();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (timeStamp) => _focusNode.requestFocus(),
+    );
   }
 
   @override
@@ -104,7 +105,11 @@ class _ClockPageState extends State<ClockPage> with TickerProviderStateMixin {
     return Scaffold(
       appBar: _buildAppBar(),
       body: Center(
-        child: _buildBody(),
+        child: RawKeyboardListener(
+          focusNode: _focusNode,
+          onKey: onKeyPressed,
+          child: _buildBody(),
+        ),
       ),
     );
   }
@@ -205,7 +210,7 @@ class _ClockPageState extends State<ClockPage> with TickerProviderStateMixin {
             log('Added: $now');
             now = now.add(_oneSecond);
           }
-          final formattedTime = DateFormat('hh:mm:ss').format(now);
+          final formattedTime = DateFormat('HH:mm:ss').format(now);
           return Center(
             child: _text(
               formattedTime,
@@ -229,7 +234,7 @@ class _ClockPageState extends State<ClockPage> with TickerProviderStateMixin {
       child: Text(
         text,
         style: GoogleFonts.actor(
-          fontSize: 120,
+          fontSize: 150,
           fontWeight: FontWeight.bold,
           color: AppColors.silver,
         ),
