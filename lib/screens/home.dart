@@ -3,6 +3,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:web_practice/screens/clock_page/clock_page.dart';
 import 'package:web_practice/screens/stalking_boxes/stalking_boxes.dart';
 import 'package:web_practice/screens/stars/game_start/game_start.dart';
+import 'package:web_practice/screens/text_shadows/text_shadows_page.dart';
 import 'package:web_practice/utils/assets.dart';
 import 'package:web_practice/utils/size_config.dart';
 import 'package:web_practice/widgets/custom_image.dart';
@@ -154,7 +155,7 @@ class _HomeState extends State<Home> {
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(
-                builder: (context) => const AnimatedBoxes(),
+                builder: (context) => const TextShadowPage(),
               ),
             ),
             onHover: (hovering) {

@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:ui';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +16,7 @@ class StalkingBoxes extends StatefulWidget {
 
 class _StalkingBoxesState extends State<StalkingBoxes> {
   final StreamController<Offset> _positionController = StreamController();
+  final _focusNode = FocusNode();
 
   Widget _getBox({
     required double size,
@@ -44,37 +45,52 @@ class _StalkingBoxesState extends State<StalkingBoxes> {
 
   @override
   void initState() {
-    window.onKeyData = (final keyData) {
-      if (keyData.logical == LogicalKeyboardKey.escape.keyId &&
-          keyData.type == KeyEventType.up) {
-        Navigator.of(context).pop();
-        return true;
-      }
-      return false;
-    };
+    // window.onKeyData = (final keyData) {
+    //   if (keyData.logical == LogicalKeyboardKey.escape.keyId &&
+    //       keyData.type == KeyEventType.up) {
+    //     Navigator.of(context).pop();
+    //     return true;
+    //   }
+    //   return false;
+    // };
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      _focusNode.requestFocus();
+    });
+  }
+
+  void onKeyPressed(RawKeyEvent keyEvent) {
+    print('Pressedddd');
+    if (keyEvent.logicalKey == LogicalKeyboardKey.escape) {
+      log('Pressed!');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
-      body: MouseRegion(
-        cursor: SystemMouseCursors.none,
-        onHover: (event) {
-          _positionController.add(event.position);
-        },
-        child: StreamBuilder<Offset>(
-          stream: _positionController.stream,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return _getStalkingBoxes(
-                position: snapshot.data!,
-              );
-            } else {
-              return _getStaticBoxes();
-            }
+      body: RawKeyboardListener(
+        focusNode: _focusNode,
+        autofocus: true,
+        onKey: onKeyPressed,
+        child: MouseRegion(
+          cursor: SystemMouseCursors.none,
+          onHover: (event) {
+            _positionController.add(event.position);
           },
+          child: StreamBuilder<Offset>(
+            stream: _positionController.stream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return _getStalkingBoxes(
+                  position: snapshot.data!,
+                );
+              } else {
+                return _getStaticBoxes();
+              }
+            },
+          ),
         ),
       ),
     );
