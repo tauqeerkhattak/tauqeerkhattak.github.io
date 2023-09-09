@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:web_practice/screens/home.dart';
+import 'package:web_practice/screens/home/home.dart';
+import 'package:web_practice/services/locator.dart';
 
 import 'utils/assets.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  init();
   runApp(const WebPractice());
 }
 
