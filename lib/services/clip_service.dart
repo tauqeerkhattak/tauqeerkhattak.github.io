@@ -11,10 +11,6 @@ class ClipService extends CustomClipper<RRect> {
 
   @override
   RRect getClip(Size size) {
-    // Path path = Path();
-    // path.addRect(
-    //   ,
-    // );
     final rect = Rect.fromCenter(
       center: center,
       width: width ?? 250,
