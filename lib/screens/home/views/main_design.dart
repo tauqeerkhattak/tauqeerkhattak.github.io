@@ -13,10 +13,8 @@ import '../../stars/game_start/game_start.dart';
 import '../../text_shadows/text_shadows_page.dart';
 
 class MainDesign extends StatefulWidget {
-  final double offset;
   const MainDesign({
     super.key,
-    required this.offset,
   });
 
   @override
@@ -26,13 +24,6 @@ class MainDesign extends StatefulWidget {
 class _MainDesignState extends State<MainDesign> {
   int imageNo = -1;
   Color textColor = Colors.black;
-
-  // double getOpacity() {
-  //   final height = MediaQuery.sizeOf(context).height;
-  //   if (widget.offset > height) {
-  //
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:web_practice/screens/home/views/main_design.dart';
 import 'package:web_practice/utils/size_config.dart';
@@ -10,76 +12,58 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // final controller = ScrollController();
-  // double height = 0.0;
+  final _controller = PageController();
+  int _currentPage = 0;
+  final widgets = [
+    const MainDesign(),
+    Container(
+      height: SizeConfig.height,
+      width: SizeConfig.width,
+      color: Colors.white,
+      child: const Text(
+        'Projects',
+      ),
+    ),
+  ];
 
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-  //     height = SizeConfig.height;
-  //     setState(() {});
-  //     controller.addListener(() {
-  //       final temp = SizeConfig.height - controller.offset;
-  //       if (temp > 0) {
-  //         height = temp;
-  //       } else {
-  //         height = 0;
-  //       }
-  //       setState(() {});
-  //     });
-  //   });
-  // }
+  Future<void> _animateToPage(int page) async {
+    await _controller.animateToPage(
+      page,
+      duration: const Duration(milliseconds: 400),
+      curve: Curves.slowMiddle,
+    );
+    _currentPage = page;
+  }
 
   @override
   Widget build(BuildContext context) {
-    SizeConfig.init(context);
     return Scaffold(
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            expandedHeight: MediaQuery.sizeOf(context).height,
-            flexibleSpace: Container(
-              // duration: const Duration(milliseconds: 100),
-              height: SizeConfig.height,
-              child: MainDesign(
-                offset: SizeConfig.height,
-              ),
-            ),
-          ),
-          // SizedBox(
-          //   height: SizeConfig.height,
-          //   child: const Text('Projects'),
-          // ),
-          SliverFillViewport(
-            delegate: SliverChildBuilderDelegate(
-              childCount: 1,
-              (context, index) => SizedBox(
-                height: SizeConfig.height,
-                child: const Text('Projects'),
-              ),
+      body: Stack(
+        children: [
+          GestureDetector(
+            onPanUpdate: (details) {
+              if (details.delta.dy > 0) {
+                log('Pan Down');
+                if (_currentPage != 0) {
+                  _animateToPage(_currentPage - 1);
+                }
+              } else {
+                log('Pan Up');
+                if (_currentPage != widgets.length - 1) {
+                  _animateToPage(_currentPage + 1);
+                }
+              }
+            },
+            child: PageView.builder(
+              controller: _controller,
+              scrollDirection: Axis.vertical,
+              itemCount: widgets.length,
+              physics: const NeverScrollableScrollPhysics(),
+              itemBuilder: (context, index) => widgets[index],
             ),
           ),
         ],
       ),
-      // body: SingleChildScrollView(
-      //   controller: controller,
-      //   child: Column(
-      //     children: [
-      //       AnimatedContainer(
-      //         duration: const Duration(milliseconds: 100),
-      //         height: height,
-      //         child: MainDesign(
-      //           offset: controller.offset,
-      //         ),
-      //       ),
-      //       SizedBox(
-      //         height: SizeConfig.height,
-      //         child: const Text('Projects'),
-      //       ),
-      //     ],
-      //   ),
-      // ),
     );
   }
 }
