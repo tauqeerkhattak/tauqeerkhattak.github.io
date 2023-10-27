@@ -7,10 +7,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 
 import '../../utils/app_colors.dart';
-import '../../utils/clock_paints/circle_painter.dart';
-import '../../utils/clock_paints/hours_painter.dart';
-import '../../utils/clock_paints/minute_painter.dart';
-import '../../utils/clock_paints/seconds_painter.dart';
+import '../../utils/painters/clock_paints/circle_painter.dart';
+import '../../utils/painters/clock_paints/hours_painter.dart';
+import '../../utils/painters/clock_paints/minute_painter.dart';
+import '../../utils/painters/clock_paints/seconds_painter.dart';
 
 class ClockPage extends StatefulWidget {
   const ClockPage({Key? key}) : super(key: key);
