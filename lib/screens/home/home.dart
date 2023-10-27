@@ -48,6 +48,7 @@ class _HomeState extends State<Home> {
           } else {
             log('UPP');
           }
+          return true;
         },
         child: PageView.builder(
           controller: _controller,
