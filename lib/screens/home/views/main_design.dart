@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:web_practice/screens/home/views/useless_fact_view.dart';
 import 'package:web_practice/utils/size_config.dart';
@@ -53,8 +54,10 @@ class _MainDesignState extends State<MainDesign> {
           child: _introBox(),
         ),
 
+        _buildDownScrollShimmer(),
+
         Positioned(
-          bottom: 0,
+          top: 0,
           left: 0,
           right: 0,
           child: Center(
@@ -214,6 +217,48 @@ class _MainDesignState extends State<MainDesign> {
         //   ),
         // ),
       ],
+    );
+  }
+
+  Widget _buildDownScrollShimmer() {
+    final textTheme = Theme.of(context).textTheme;
+    return Positioned(
+      bottom: 10,
+      left: 0,
+      right: 0,
+      child: Shimmer.fromColors(
+        baseColor: Colors.black12,
+        highlightColor: Colors.white,
+        direction: ShimmerDirection.ltr,
+        period: const Duration(milliseconds: 1400),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/scroll_down.png',
+              height: 30,
+              width: 30,
+              color: textColor,
+            ),
+            const SizedBox(
+              width: 15,
+            ),
+            Text(
+              'Scroll down!',
+              style: textTheme.displaySmall?.copyWith(
+                color: textColor,
+              ),
+            ),
+          ],
+        ),
+      ),
+      // child: Center(
+      //   child: Image.asset(
+      //     'assets/images/scroll_down.png',
+      //     height: 40,
+      //     width: 40,
+      //   ),
+      // ),
     );
   }
 

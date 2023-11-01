@@ -1,5 +1,6 @@
-import 'dart:developer';
+import 'dart:math';
 
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:web_practice/screens/half_filled_text/half_filled_text_page.dart';
 import 'package:web_practice/screens/home/views/main_design.dart';
@@ -32,7 +33,7 @@ class _HomeState extends State<Home> {
   Future<void> _animateToPage(int page) async {
     await _controller.animateToPage(
       page,
-      duration: const Duration(milliseconds: 400),
+      duration: const Duration(milliseconds: 600),
       curve: Curves.slowMiddle,
     );
     _currentPage = page;
@@ -41,14 +42,20 @@ class _HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: NotificationListener<ScrollNotification>(
-        onNotification: (notification) {
-          if (notification.metrics.axisDirection == AxisDirection.down) {
-            log('DOWN');
-          } else {
-            log('UPP');
+      body: Listener(
+        onPointerSignal: (signal) {
+          if (signal is PointerScrollEvent) {
+            final distanceDegrees = signal.scrollDelta.direction * (180 / pi);
+            if (distanceDegrees > 0) {
+              if (_currentPage < widgets.length - 1) {
+                _animateToPage(_currentPage + 1);
+              }
+            } else {
+              if (_currentPage > 0) {
+                _animateToPage(_currentPage - 1);
+              }
+            }
           }
-          return true;
         },
         child: PageView.builder(
           controller: _controller,
