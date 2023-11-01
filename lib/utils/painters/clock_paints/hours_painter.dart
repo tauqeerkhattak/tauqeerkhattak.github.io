@@ -2,39 +2,37 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../app_colors.dart';
+import '../../app_colors.dart';
 
-class SecondsPainter extends CustomPainter {
-  // final int seconds;
+class HoursPainter extends CustomPainter {
   final double value;
 
-  SecondsPainter({
-    // required this.seconds,
+  HoursPainter({
     required this.value,
   });
 
   @override
   void paint(Canvas canvas, Size size) {
-    // Variables
     final width = size.width;
     final height = size.height;
     final centerOffset = Offset(width / 2, height / 2);
-    final radius = (height / 2) - 30;
+    final radius = (height / 2) - 100;
     Paint paint = Paint()
       ..color = AppColors.silver
-      ..strokeWidth = 5
+      ..strokeWidth = 10
       ..strokeCap = StrokeCap.round;
-    final newSeconds = value;
-    final secondAngle = 180 - (newSeconds * 6);
-    final x = radius * math.sin(math.pi * 2 * (secondAngle / 360));
-    final y = radius * math.cos(math.pi * 2 * (secondAngle / 360));
+
+    final newHours = value;
+    final hoursAngle = 180 - (newHours * 30);
+    final x = radius * math.sin(math.pi * 2 * (hoursAngle / 360));
+    final y = radius * math.cos(math.pi * 2 * (hoursAngle / 360));
     final secondOffset = Offset(x, y);
     final resultantOffset = secondOffset + centerOffset;
     canvas.drawLine(centerOffset, resultantOffset, paint);
   }
 
   @override
-  bool shouldRepaint(SecondsPainter oldDelegate) {
+  bool shouldRepaint(HoursPainter oldDelegate) {
     return oldDelegate.value != value;
   }
 }

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:web_practice/screens/home.dart';
+import 'package:web_practice/screens/home/home.dart';
+import 'package:web_practice/services/locator.dart';
 
 import 'utils/assets.dart';
+import 'utils/size_config.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  init();
   runApp(const WebPractice());
 }
 
@@ -14,6 +17,7 @@ class WebPractice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SizeConfig.init(context);
     for (final image in Assets.images) {
       precacheImage(AssetImage(image), context);
     }

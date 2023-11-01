@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
-import '../app_colors.dart';
+import '../../app_colors.dart';
 
 class CirclePainter extends CustomPainter {
   final byQuarterAngles = [

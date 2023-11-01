@@ -4,6 +4,11 @@ class AppColors {
   static const silver = Color(0xffaaa9ad);
   static const sapphire = Color(0xff2D5DA1);
 
+  static const lightBlack = Color(0xff262626);
+  static const darkBlack = Color(0xff2D2D2D);
+  static const primaryText = Color(0xffFEFEFE);
+  static const dividerColor = Color(0xff4A4A4A);
+
   static const boxColors = [
     Colors.purple,
     Colors.blue,
