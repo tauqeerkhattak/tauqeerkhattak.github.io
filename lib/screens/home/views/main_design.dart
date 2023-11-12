@@ -1,7 +1,10 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_framework/responsive_breakpoints.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:web_practice/screens/home/views/useless_fact_view.dart';
+import 'package:web_practice/screens/home/views/animated_technologies.dart';
+import 'package:web_practice/utils/app_colors.dart';
 import 'package:web_practice/utils/size_config.dart';
 
 import '../../../utils/assets.dart';
@@ -28,6 +31,11 @@ class _MainDesignState extends State<MainDesign> {
 
   @override
   Widget build(BuildContext context) {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    final isTablet = ResponsiveBreakpoints.of(context).isTablet;
+    if (isMobile || isTablet) {
+      return _introBox(true);
+    }
     return Stack(
       children: [
         //Main Background
@@ -51,7 +59,7 @@ class _MainDesignState extends State<MainDesign> {
 
         Positioned(
           top: 0,
-          child: _introBox(),
+          child: _introBox(false),
         ),
 
         _buildDownScrollShimmer(),
@@ -252,27 +260,22 @@ class _MainDesignState extends State<MainDesign> {
           ],
         ),
       ),
-      // child: Center(
-      //   child: Image.asset(
-      //     'assets/images/scroll_down.png',
-      //     height: 40,
-      //     width: 40,
-      //   ),
-      // ),
     );
   }
 
-  Widget _introBox() {
+  Widget _introBox(bool isMobile) {
     final textTheme = Theme.of(context).textTheme;
-    return SizedBox(
+    return Container(
+      color: isMobile ? AppColors.dividerColor : null,
       height: SizeConfig.height,
-      width: SizeConfig.width * 0.5,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
+            width: isMobile ? SizeConfig.width * 0.9 : SizeConfig.width * 0.5,
             padding: const EdgeInsets.all(10),
+            margin: const EdgeInsets.all(10),
             decoration: BoxDecoration(
               border: Border.all(
                 color: textColor,
@@ -281,9 +284,10 @@ class _MainDesignState extends State<MainDesign> {
             ),
             child: Column(
               children: [
-                Text(
+                AutoSizeText(
                   'Tauqeer Ahmed Khattak',
                   textAlign: TextAlign.center,
+                  maxLines: 1,
                   style: textTheme.displayLarge?.copyWith(
                     color: textColor,
                   ),
@@ -292,43 +296,46 @@ class _MainDesignState extends State<MainDesign> {
                   onTap: () {
                     launchUrl(Uri.parse(Constants.githubUri));
                   },
-                  child: Text(
+                  child: AutoSizeText(
                     '< github.com/tauqeerkhattak />',
+                    maxLines: 1,
                     style: textTheme.displayMedium?.copyWith(
                       color: textColor,
                     ),
                   ),
+                ),
+                const SizedBox(
+                  height: 5,
                 ),
                 SizedBox(
                   width: 300,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: Assets.socials.map((social) {
-                      return _buildSocial(social);
+                      return _buildSocial(social, isMobile);
                     }).toList(),
                   ),
                 ),
               ],
             ),
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          Text(
-            'Note: Click any picture!',
-            style: textTheme.displaySmall?.copyWith(
-              color: textColor,
+          if (!isMobile)
+            Text(
+              'Note: Click any picture!',
+              style: textTheme.displaySmall?.copyWith(
+                color: textColor,
+              ),
             ),
+          AnimatedTechnologies(
+            textColor: textColor,
           ),
-          UselessFactView(
-            color: textColor,
-          ),
+          if (isMobile) _footerText(),
         ],
       ),
     );
   }
 
-  Widget _buildSocial(String link) {
+  Widget _buildSocial(String link, bool isMobile) {
     return InkWell(
       onTap: () async {
         String linkToGo = '';
@@ -357,8 +364,8 @@ class _MainDesignState extends State<MainDesign> {
         ),
         child: Image.asset(
           link,
-          height: 30,
-          width: 30,
+          height: isMobile ? 25 : 30,
+          width: isMobile ? 25 : 30,
           color: textColor,
         ),
       ),
