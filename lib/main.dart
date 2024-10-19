@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:responsive_framework/breakpoint.dart';
-import 'package:responsive_framework/responsive_breakpoints.dart';
+import 'package:responsive_framework/responsive_framework.dart';
+import 'package:web_practice/screens/beenit/privacy_policy.dart';
 import 'package:web_practice/screens/home/home.dart';
 import 'package:web_practice/services/locator.dart';
 
@@ -11,11 +11,11 @@ import 'utils/size_config.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   init();
-  runApp(const WebPractice());
+  runApp(const Portfolio());
 }
 
-class WebPractice extends StatelessWidget {
-  const WebPractice({Key? key}) : super(key: key);
+class Portfolio extends StatelessWidget {
+  const Portfolio({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +26,22 @@ class WebPractice extends StatelessWidget {
     return MaterialApp(
       theme: _getThemeData(),
       title: 'Tauqeer Ahmed',
+      routes: {
+        '/beenit/privacy-policy': (_) => BeenItPrivacyPolicy(),
+        '/': (_) => const Home(),
+      },
+      initialRoute: '/',
       builder: (context, child) {
-        return ResponsiveBreakpoints.builder(
-          child: child!,
+        return ResponsiveBreakpoints(
           breakpoints: [
             const Breakpoint(start: 0, end: 450, name: MOBILE),
             const Breakpoint(start: 451, end: 800, name: TABLET),
             const Breakpoint(start: 801, end: 1920, name: DESKTOP),
             const Breakpoint(start: 1921, end: double.infinity, name: '4K'),
           ],
+          child: child!,
         );
       },
-      home: const Home(),
     );
   }
 

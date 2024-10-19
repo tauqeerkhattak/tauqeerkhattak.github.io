@@ -22,6 +22,7 @@ class Assets {
   static const String git = 'assets/technologies/git.svg';
   static const String java = 'assets/technologies/java.svg';
   static const String nodejs = 'assets/technologies/nodejs.svg';
+  static const String beenitLogo = 'assets/images/beenit_logo.png';
 
   static const List<String> obstacles = [
     rock,

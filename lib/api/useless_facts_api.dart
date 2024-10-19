@@ -20,7 +20,7 @@ abstract class UselessFactsApi extends ChopperService {
   Future<Response<UselessFactsResponse>> getUselessFact();
 }
 
-Future<Response> convertResponse(Response response) async {
+Response<UselessFactsResponse> convertResponse(Response response) {
   return response.copyWith(
     body: response.body != null
         ? UselessFactsResponse.fromJson(jsonDecode(response.body!))
