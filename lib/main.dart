@@ -5,6 +5,7 @@ import 'package:web_practice/screens/beenit/privacy_policy.dart';
 import 'package:web_practice/screens/home/home.dart';
 import 'package:web_practice/services/locator.dart';
 
+import 'screens/beenit/beenit_deletion_steps.dart';
 import 'utils/assets.dart';
 import 'utils/size_config.dart';
 
@@ -27,6 +28,7 @@ class Portfolio extends StatelessWidget {
       theme: _getThemeData(),
       title: 'Tauqeer Ahmed',
       routes: {
+        '/beenit/deletion-steps': (_) => BeenItDeletionSteps(),
         '/beenit/privacy-policy': (_) => BeenItPrivacyPolicy(),
         '/': (_) => const Home(),
       },
