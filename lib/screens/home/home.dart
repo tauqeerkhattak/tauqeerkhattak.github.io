@@ -116,12 +116,13 @@ class _HomeState extends State<Home> {
   }
 
   Widget _buildBody() {
+    final size = MediaQuery.sizeOf(context);
     return Stack(
       children: [
         Transform.rotate(
           angle: angle,
-          filterQuality: FilterQuality.high,
           alignment: Alignment.bottomLeft,
+          origin: Offset.zero,
           child: GestureDetector(
             onTap: () {
               setState(() {
@@ -129,13 +130,12 @@ class _HomeState extends State<Home> {
               });
             },
             child: CustomPaint(
-              willChange: false,
               painter: LinePainter(
                 turnedOn: _lightSwitch,
                 image: _image,
-                size: MediaQuery.sizeOf(context),
+                size: size,
               ),
-              size: MediaQuery.sizeOf(context),
+              size: size,
             ),
           ),
         ),

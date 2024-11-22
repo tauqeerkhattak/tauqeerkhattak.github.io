@@ -20,7 +20,7 @@ class LinePainter extends CustomPainter {
   void paint(Canvas canvas, Size size) {
     if (image != null) {
       final paint = Paint();
-      canvas.drawImage(image!, Offset(-30, size.height * 0.91), paint);
+      canvas.drawImage(image!, Offset(-28, size.height * 0.91), paint);
     }
     final path = Path();
     final hypotenuse = sqrt(pow(size.width, 2) + pow(size.height, 2));
