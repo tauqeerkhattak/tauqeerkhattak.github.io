@@ -2,11 +2,14 @@ import 'dart:developer';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:web_practice/screens/home/painters/line_painter.dart';
-import 'package:web_practice/utils/assets.dart';
+
+import '../../main.dart';
+import '../../utils/assets.dart';
+import '../../utils/painters/line_painter.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -106,173 +109,103 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    final color = Theme.of(context).scaffoldBackgroundColor;
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: color,
       body: MouseRegion(
         onHover: (event) => _calculateAngle(event.position),
-        child: _buildBody(),
+        child: _buildBody(color),
       ),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(Color color) {
     final size = MediaQuery.sizeOf(context);
     return Stack(
       children: [
-        Transform.rotate(
-          angle: angle,
-          alignment: Alignment.bottomLeft,
-          origin: Offset.zero,
-          child: GestureDetector(
-            onTap: () {
-              setState(() {
-                _lightSwitch = !_lightSwitch;
-              });
-            },
-            child: CustomPaint(
-              painter: LinePainter(
-                turnedOn: _lightSwitch,
-                image: _image,
-                size: size,
+        _buildFlashLight(size),
+        _buildContent(color),
+        _buildThemeButton(color),
+      ],
+    );
+  }
+
+  _buildContent(ui.Color color) {
+    return Row(
+      children: [
+        Expanded(
+          child: Center(
+            child: AutoSizeText(
+              'TAUQEER',
+              stepGranularity: 1,
+              maxFontSize: 100,
+              minFontSize: 30,
+              style: GoogleFonts.sora(
+                color: color,
+                fontWeight: FontWeight.w600,
+                fontSize: 100,
+                shadows: [
+                  Shadow(
+                    color: color.withOpacity(0.8),
+                    blurRadius: 5,
+                    offset: Offset(5, 5),
+                  )
+                ],
               ),
-              size: size,
-            ),
-          ),
-        ),
-        Center(
-          child: Text(
-            'TAUQEER',
-            style: GoogleFonts.sora(
-              color: Colors.black,
-              fontSize: 110,
-              fontWeight: FontWeight.w600,
-              shadows: [
-                Shadow(
-                  color: Colors.black54,
-                  blurRadius: 5,
-                  offset: Offset(5, 5),
-                )
-              ],
             ),
           ),
         ),
       ],
     );
   }
-}
 
-// import 'package:flutter/material.dart';
-// import 'package:web_practice/screens/home/painters/line_painter.dart';
-//
-// class Home extends StatefulWidget {
-//   const Home({super.key});
-//
-//   @override
-//   State<Home> createState() => _HomeState();
-// }
-//
-// class _HomeState extends State<Home> {
-//   Offset _mousePosition = Offset(100, 100);
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       backgroundColor: Colors.black,
-//       body: MouseRegion(
-//         onHover: (event) {
-//           setState(() {
-//             _mousePosition = event.position;
-//           });
-//         },
-//         child: _buildBody(),
-//       ),
-//     );
-//   }
-//
-//   Widget _buildBody() {
-//     final size = MediaQuery.sizeOf(context);
-//     return SizedBox.fromSize(
-//       size: size,
-//       child: CustomPaint(
-//         painter: LinePainter(
-//           startingPosition: Offset(0, size.height),
-//           mousePosition: _mousePosition,
-//         ),
-//         size: size,
-//         child: SizedBox.fromSize(
-//           size: size,
-//         ),
-//       ),
-//     );
-//   }
-// }
-//
-// // import 'dart:math';
-// //
-// // import 'package:flutter/gestures.dart';
-// // import 'package:flutter/material.dart';
-// // import 'package:web_practice/screens/half_filled_text/half_filled_text_page.dart';
-// // import 'package:web_practice/screens/home/views/main_design.dart';
-// //
-// // class Home extends StatefulWidget {
-// //   const Home({Key? key}) : super(key: key);
-// //
-// //   @override
-// //   State<Home> createState() => _HomeState();
-// // }
-// //
-// // class _HomeState extends State<Home> {
-// //   final _controller = PageController();
-// //   int _currentPage = 0;
-// //   final widgets = [
-// //     const MainDesign(),
-// //     const HalfFilledTexPage(
-// //       text: 'Projects',
-// //     ),
-// //     // Container(
-// //     //   height: SizeConfig.height,
-// //     //   width: SizeConfig.width,
-// //     //   color: Colors.white,
-// //     //   child: const Text(
-// //     //     'Projects',
-// //     //   ),
-// //     // ),
-// //   ];
-// //
-// //   Future<void> _animateToPage(int page) async {
-// //     await _controller.animateToPage(
-// //       page,
-// //       duration: const Duration(milliseconds: 600),
-// //       curve: Curves.slowMiddle,
-// //     );
-// //     _currentPage = page;
-// //   }
-// //
-// //   @override
-// //   Widget build(BuildContext context) {
-// //     return Scaffold(
-// //       body: Listener(
-// //         onPointerSignal: (signal) {
-// //           if (signal is PointerScrollEvent) {
-// //             final distanceDegrees = signal.scrollDelta.direction * (180 / pi);
-// //             if (distanceDegrees > 0) {
-// //               if (_currentPage < widgets.length - 1) {
-// //                 _animateToPage(_currentPage + 1);
-// //               }
-// //             } else {
-// //               if (_currentPage > 0) {
-// //                 _animateToPage(_currentPage - 1);
-// //               }
-// //             }
-// //           }
-// //         },
-// //         child: PageView.builder(
-// //           controller: _controller,
-// //           scrollDirection: Axis.vertical,
-// //           itemCount: widgets.length,
-// //           physics: const NeverScrollableScrollPhysics(),
-// //           itemBuilder: (context, index) => widgets[index],
-// //         ),
-// //       ),
-// //     );
-// //   }
-// // }
+  Transform _buildFlashLight(ui.Size size) {
+    final theme = Theme.of(context).brightness;
+    return Transform.rotate(
+      angle: angle,
+      alignment: Alignment.bottomLeft,
+      origin: Offset.zero,
+      child: GestureDetector(
+        onTap: () {
+          setState(() {
+            _lightSwitch = !_lightSwitch;
+          });
+        },
+        child: CustomPaint(
+          painter: LinePainter(
+            turnedOn: _lightSwitch,
+            image: _image,
+            isDark: theme == ui.Brightness.dark,
+            size: size,
+          ),
+          size: size,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildThemeButton(Color color) {
+    final isDark = Theme.of(context).brightness == ui.Brightness.dark;
+    return Positioned(
+      right: 10,
+      top: 10,
+      child: IconButton(
+        onPressed: () {
+          if (isDark) {
+            themeNotifier.value = ui.Brightness.light;
+          } else {
+            themeNotifier.value = ui.Brightness.dark;
+          }
+        },
+        style: ElevatedButton.styleFrom(
+          elevation: 10,
+        ),
+        icon: Icon(
+          isDark ? Icons.light_mode : Icons.dark_mode,
+          size: 30,
+          color: color,
+        ),
+      ),
+    );
+  }
+}

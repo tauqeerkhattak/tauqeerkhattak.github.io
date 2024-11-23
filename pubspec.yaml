@@ -1,4 +1,4 @@
-name: web_practice
+name: tauqeer_portfolio
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -32,15 +32,6 @@ dependencies:
   cupertino_icons: ^1.0.8
   url_launcher: ^6.3.1
   google_fonts: ^6.2.1
-  lottie: ^3.1.3
-  intl: ^0.20.0
-  dio: ^5.7.0
-  chopper: ^8.0.3
-  json_annotation: ^4.9.0
-  get_it: ^8.0.2
-  shimmer: ^3.0.0
-  responsive_framework: ^1.5.1
-  flutter_svg: ^2.0.14
   auto_size_text: ^3.0.0
 
 dependency_overrides:
@@ -67,7 +58,6 @@ flutter:
 
   assets:
     - assets/images/
-    - assets/lottie/
     - assets/technologies/
   # To add assets to your application, add an assets section, like this:
   # assets:

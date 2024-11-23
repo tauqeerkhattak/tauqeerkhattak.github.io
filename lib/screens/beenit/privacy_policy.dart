@@ -1,7 +1,8 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:web_practice/utils/assets.dart';
+
+import '../../utils/assets.dart';
 
 class BeenItPrivacyPolicy extends StatelessWidget {
   const BeenItPrivacyPolicy({super.key});
