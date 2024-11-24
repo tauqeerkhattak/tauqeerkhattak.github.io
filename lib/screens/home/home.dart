@@ -2,10 +2,10 @@ import 'dart:developer';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import '../../main.dart';
 import '../../utils/assets.dart';
@@ -27,6 +27,18 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     loadImage();
+  }
+
+  double _getFontSize() {
+    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
+    if (isMobile) {
+      return 34;
+    }
+    final isTablet = ResponsiveBreakpoints.of(context).isTablet;
+    if (isTablet) {
+      return 60;
+    }
+    return 100;
   }
 
   Future<void> loadImage() async {
@@ -54,33 +66,6 @@ class _HomeState extends State<Home> {
       });
     }
     return;
-    // final aPoint = Offset.zero;
-    // final bPoint = Offset(0, -screenSize.height);
-    // final cPoint = position;
-    //
-    // // Calculate Edge a:
-    // final x1 =
-    //     pow(cPoint.dx - bPoint.dx, 2) + pow((-cPoint.dy) - (-bPoint.dy), 2);
-    // final edgeA = math.sqrt(x1);
-    //
-    // // Calculate Edge b:
-    // final x2 =
-    //     pow(cPoint.dx - aPoint.dx, 2) + pow((-cPoint.dy) - (-aPoint.dy), 2);
-    // final edgeB = math.sqrt(x2);
-    //
-    // // Calculate Edge c:
-    // // No need to calculate edge c as it will be equal to screen height.
-    // final edgeC = screenSize.height;
-    //
-    // // Calculate angle between edgeC and edgeB
-    // final upper = pow(edgeA, 2) + pow(edgeC, 2) - pow(edgeB, 2);
-    // final lower = 2 * edgeA * edgeC;
-    // final newAngle = acos(upper / lower);
-    // if (!newAngle.isNaN) {
-    //   this.angle = newAngle;
-    //   _mouseOffset = position;
-    //   setState(() {});
-    // }
   }
 
   double calculateAngleAtB(double screenHeight, double mouseX, double mouseY) {
@@ -130,32 +115,24 @@ class _HomeState extends State<Home> {
     );
   }
 
-  _buildContent(ui.Color color) {
-    return Row(
-      children: [
-        Expanded(
-          child: Center(
-            child: AutoSizeText(
-              'TAUQEER',
-              stepGranularity: 1,
-              maxFontSize: 100,
-              minFontSize: 30,
-              style: GoogleFonts.sora(
-                color: color,
-                fontWeight: FontWeight.w600,
-                fontSize: 100,
-                shadows: [
-                  Shadow(
-                    color: color.withOpacity(0.8),
-                    blurRadius: 5,
-                    offset: Offset(5, 5),
-                  )
-                ],
-              ),
-            ),
-          ),
+  Center _buildContent(ui.Color color) {
+    final isMobile = ResponsiveBreakpoints.of(context).smallerOrEqualTo(TABLET);
+    return Center(
+      child: Text(
+        'TAUQEER',
+        style: GoogleFonts.sora(
+          color: color,
+          fontWeight: FontWeight.w600,
+          fontSize: _getFontSize(),
+          shadows: [
+            Shadow(
+              color: color.withOpacity(0.8),
+              blurRadius: 5,
+              offset: isMobile ? Offset(3, 3) : Offset(5, 5),
+            )
+          ],
         ),
-      ],
+      ),
     );
   }
 
