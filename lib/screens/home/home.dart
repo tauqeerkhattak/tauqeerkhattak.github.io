@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:math' as math;
 import 'dart:ui' as ui;
 
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -22,11 +23,12 @@ class _HomeState extends State<Home> {
   double angle = 0;
   ui.Image? _image;
   bool _lightSwitch = true;
+  final _analytics = FirebaseAnalytics.instance;
 
   @override
   void initState() {
     super.initState();
-    loadImage();
+    _loadImage();
   }
 
   double _getFontSize() {
@@ -41,11 +43,12 @@ class _HomeState extends State<Home> {
     return 100;
   }
 
-  Future<void> loadImage() async {
+  Future<void> _loadImage() async {
     try {
       final data = await rootBundle.load(Assets.light);
       _image = await decodeImageFromList(data.buffer.asUint8List());
       setState(() {});
+      await _saveAnalyticsData();
     } catch (e) {
       log('Exception: $e');
     }
@@ -55,7 +58,7 @@ class _HomeState extends State<Home> {
     // Applying law of cosines to find angle between mouse position and lamp
     // starting point.
     final screenSize = MediaQuery.sizeOf(context);
-    final angle = calculateAngleAtB(
+    final angle = _calculateAngleAtB(
       screenSize.height,
       position.dx,
       position.dy,
@@ -68,7 +71,7 @@ class _HomeState extends State<Home> {
     return;
   }
 
-  double calculateAngleAtB(double screenHeight, double mouseX, double mouseY) {
+  double _calculateAngleAtB(double screenHeight, double mouseX, double mouseY) {
     // Vectors
     double BAx = 0;
     double BAy = -screenHeight;
@@ -90,6 +93,16 @@ class _HomeState extends State<Home> {
 
     // Convert to degrees
     return angleInRadians;
+  }
+
+  Future<void> _saveAnalyticsData() async {
+    final name = ResponsiveBreakpoints.of(context).breakpoint.name;
+    await _analytics.logEvent(
+      name: 'ScreenSizeEvent',
+      parameters: {
+        'sizeName': name ?? '',
+      },
+    );
   }
 
   @override
@@ -147,6 +160,12 @@ class _HomeState extends State<Home> {
           setState(() {
             _lightSwitch = !_lightSwitch;
           });
+          _analytics.logEvent(
+            name: 'TorchEvent',
+            parameters: {
+              'status': _lightSwitch,
+            },
+          );
         },
         child: CustomPaint(
           painter: LinePainter(
@@ -173,6 +192,12 @@ class _HomeState extends State<Home> {
           } else {
             themeNotifier.value = ui.Brightness.dark;
           }
+          _analytics.logEvent(
+            name: 'ThemeChangeEvent',
+            parameters: {
+              'theme': isDark ? ui.Brightness.dark : ui.Brightness.light,
+            },
+          );
         },
         style: ElevatedButton.styleFrom(
           elevation: 10,

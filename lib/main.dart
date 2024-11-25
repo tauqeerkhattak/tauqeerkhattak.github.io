@@ -1,9 +1,10 @@
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
-// import 'package:responsive_framework/responsive_framework.dart';
-
+import 'firebase_options.dart';
 import 'screens/beenit/beenit_deletion_steps.dart';
 import 'screens/beenit/privacy_policy.dart';
 import 'screens/home/home.dart';
@@ -12,6 +13,9 @@ final themeNotifier = ValueNotifier<Brightness>(Brightness.dark);
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const Portfolio());
 }
 
@@ -33,6 +37,11 @@ class Portfolio extends StatelessWidget {
             '/': (_) => const Home(),
           },
           initialRoute: '/',
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(
+              analytics: FirebaseAnalytics.instance,
+            ),
+          ],
           builder: (context, child) {
             return ResponsiveBreakpoints(
               breakpoints: [
