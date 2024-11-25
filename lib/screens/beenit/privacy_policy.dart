@@ -136,6 +136,7 @@ class BeenItPrivacyPolicy extends StatelessWidget {
             ),
             SizedBox(height: 10),
             _buildEmailSpanText(
+              context: context,
               text:
                   'Depending on your jurisdiction, you may have the right to access, correct, or delete your personal information. '
                   'You can do this by contacting our support team at ',
@@ -169,6 +170,7 @@ class BeenItPrivacyPolicy extends StatelessWidget {
             ),
             SizedBox(height: 10),
             _buildEmailSpanText(
+              context: context,
               text:
                   'If you have any questions or concerns about this Privacy Policy, please contact us at ',
             ),
@@ -178,11 +180,16 @@ class BeenItPrivacyPolicy extends StatelessWidget {
     );
   }
 
-  RichText _buildEmailSpanText({required String text}) {
+  RichText _buildEmailSpanText({
+    required BuildContext context,
+    required String text,
+  }) {
     return RichText(
       text: TextSpan(
         text: text,
-        style: TextStyle(fontSize: 16),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontSize: 16,
+            ),
         children: [
           TextSpan(
             text: 'tauqeer745@outlook.com',

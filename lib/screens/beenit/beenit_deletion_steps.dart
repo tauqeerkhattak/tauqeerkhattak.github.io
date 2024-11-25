@@ -11,11 +11,13 @@ class BeenItDeletionSteps extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: _buildBody(),
+      body: _buildBody(
+        context,
+      ),
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     return SingleChildScrollView(
       padding: EdgeInsets.all(16.0),
       child: Column(
@@ -101,6 +103,7 @@ class BeenItDeletionSteps extends StatelessWidget {
           ),
           SizedBox(height: 10),
           _buildEmailSpanText(
+            context: context,
             text:
                 'If you no longer have the app installed and wish to delete your account, please send an email with your email address or phone number associated with your account and We will process your request and delete your account or data for you. Kindly send your account info at ',
           ),
@@ -109,11 +112,14 @@ class BeenItDeletionSteps extends StatelessWidget {
     );
   }
 
-  RichText _buildEmailSpanText({required String text}) {
+  RichText _buildEmailSpanText(
+      {required BuildContext context, required String text}) {
     return RichText(
       text: TextSpan(
         text: text,
-        style: TextStyle(fontSize: 16),
+        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+              fontSize: 16,
+            ),
         children: [
           TextSpan(
             text: 'tauqeer745@outlook.com',
