@@ -7,6 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
+import 'package:tauqeer_portfolio/utils/context_utils.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../main.dart';
 import '../../utils/assets.dart';
@@ -29,18 +31,6 @@ class _HomeState extends State<Home> {
   void initState() {
     super.initState();
     _loadImage();
-  }
-
-  double _getFontSize() {
-    final isMobile = ResponsiveBreakpoints.of(context).isMobile;
-    if (isMobile) {
-      return 34;
-    }
-    final isTablet = ResponsiveBreakpoints.of(context).isTablet;
-    if (isTablet) {
-      return 60;
-    }
-    return 100;
   }
 
   Future<void> _loadImage() async {
@@ -120,6 +110,7 @@ class _HomeState extends State<Home> {
   Widget _buildBody(Color color) {
     final size = MediaQuery.sizeOf(context);
     return Stack(
+      fit: StackFit.expand,
       children: [
         _buildFlashLight(size),
         _buildContent(color),
@@ -128,24 +119,56 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Center _buildContent(ui.Color color) {
+  Column _buildContent(ui.Color color) {
     final isMobile = ResponsiveBreakpoints.of(context).smallerOrEqualTo(TABLET);
-    return Center(
-      child: Text(
-        'TAUQEER',
-        style: GoogleFonts.sora(
-          color: color,
-          fontWeight: FontWeight.w600,
-          fontSize: _getFontSize(),
-          shadows: [
-            Shadow(
-              color: color.withOpacity(0.8),
-              blurRadius: 5,
-              offset: isMobile ? Offset(3, 3) : Offset(5, 5),
-            )
-          ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Text(
+          'TAUQEER',
+          style: GoogleFonts.sora(
+            color: color,
+            fontWeight: FontWeight.w600,
+            fontSize: context.when(
+              desktop: 100,
+              tablet: 60,
+              mobile: 34,
+            ),
+            shadows: [
+              Shadow(
+                color: color.withOpacity(0.8),
+                blurRadius: 5,
+                offset: isMobile ? Offset(3, 3) : Offset(5, 5),
+              )
+            ],
+          ),
         ),
-      ),
+        MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: GestureDetector(
+            onTap: () {
+              launchUrl(
+                Uri.parse('https://github.com/tauqeerkhattak'),
+              );
+            },
+            child: Text(
+              '<github.com/tauqeerkhattak/>',
+              style: GoogleFonts.sora(
+                color: color,
+                fontWeight: FontWeight.w600,
+                fontSize: context.when(desktop: 45, tablet: 30, mobile: 20),
+                shadows: [
+                  Shadow(
+                    color: color.withValues(alpha: 0.8),
+                    blurRadius: 5,
+                    offset: isMobile ? Offset(2, 2) : Offset(3, 3),
+                  )
+                ],
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +12,17 @@ import 'screens/beenit/privacy_policy.dart';
 import 'screens/home/home.dart';
 
 final themeNotifier = ValueNotifier<Brightness>(Brightness.dark);
+final navigatorKey = GlobalKey<NavigatorState>();
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  try {
+    await Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    );
+  } catch (e) {
+    log('Exception: $e');
+  }
   runApp(const Portfolio());
 }
 
@@ -30,6 +37,7 @@ class Portfolio extends StatelessWidget {
         return MaterialApp(
           theme: _getThemeData(value),
           darkTheme: _getThemeData(value),
+          navigatorKey: navigatorKey,
           title: 'Tauqeer Ahmed',
           routes: {
             '/beenit/deletion-steps': (_) => BeenItDeletionSteps(),
