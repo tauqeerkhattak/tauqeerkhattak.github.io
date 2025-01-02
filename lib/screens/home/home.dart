@@ -156,13 +156,13 @@ class _HomeState extends State<Home> {
               style: GoogleFonts.sora(
                 color: color,
                 fontWeight: FontWeight.w600,
-                fontSize: context.when(desktop: 45, tablet: 30, mobile: 20),
+                fontSize: context.when(desktop: 30, tablet: 25, mobile: 18),
                 shadows: [
                   Shadow(
                     color: color.withValues(alpha: 0.8),
                     blurRadius: 5,
                     offset: isMobile ? Offset(2, 2) : Offset(3, 3),
-                  )
+                  ),
                 ],
               ),
             ),
