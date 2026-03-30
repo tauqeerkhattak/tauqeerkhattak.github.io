@@ -12,7 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   # FIREBASE STUFF
-  firebase_core: ^3.8.0
+  firebase_core: ^4.0.0
   firebase_analytics: ^11.3.5
 
   cupertino_icons: ^1.0.8
