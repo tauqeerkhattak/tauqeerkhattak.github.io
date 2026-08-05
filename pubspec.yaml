@@ -35,6 +35,7 @@ flutter:
   assets:
     - assets/images/
     - assets/technologies/
+    - assets/Tauqeer_Ahmed_Resume.pdf
 
 flutter_native_splash:
   color: "#000000"

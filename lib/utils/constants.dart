@@ -66,4 +66,6 @@ class Constants {
 
   static const String education =
       'Bachelor\'s Degree, Software Engineering\nMUET, Jamshoro Pakistan\nOctober 2017 – October 2021\nGraduated with a 3.76 CGPA';
+
+  static const String resumePath = 'assets/Tauqeer_Ahmed_Resume.pdf';
 }

@@ -26,10 +26,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  double angle = 0;
+  final ValueNotifier<double> _angleNotifier = ValueNotifier(0);
+  final ValueNotifier<bool> _lightSwitchNotifier = ValueNotifier(true);
+  final ValueNotifier<bool> _roomLightNotifier = ValueNotifier(false);
   ui.Image? _image;
-  bool _lightSwitch = true;
-  bool _roomLight = false;
   final _analytics = FirebaseAnalytics.instance;
   final ScrollController _scrollController = ScrollController();
 
@@ -63,9 +63,7 @@ class _HomeState extends State<Home> {
       position.dy,
     );
     if (!angle.isNaN) {
-      setState(() {
-        this.angle = angle;
-      });
+      _angleNotifier.value = angle;
     }
   }
 
@@ -122,9 +120,9 @@ class _HomeState extends State<Home> {
         onHover: (event) => _calculateAngle(event.position),
         child: Stack(
           children: [
-            _buildMainContent(color),
-            _buildFlashLightOverlay(),
+            RepaintBoundary(child: _buildMainContent(color)),
             _buildFloatingNavigation(),
+            _buildFlashLightOverlay(),
           ],
         ),
       ),
@@ -161,17 +159,30 @@ class _HomeState extends State<Home> {
 
   Widget _buildFlashLightOverlay() {
     final size = MediaQuery.sizeOf(context);
+    final isDark = Theme.of(context).brightness == ui.Brightness.dark;
+
     return IgnorePointer(
-      child: CustomPaint(
-        painter: LinePainter(
-          turnedOn: _lightSwitch,
-          screenSize: size,
-          isDark: Theme.of(context).brightness == ui.Brightness.dark,
-          angle: angle,
-          roomLight: _roomLight,
-          image: _image,
-        ),
-        size: size,
+      child: ListenableBuilder(
+        listenable: Listenable.merge([
+          _angleNotifier,
+          _lightSwitchNotifier,
+          _roomLightNotifier,
+        ]),
+        builder: (context, child) {
+          return RepaintBoundary(
+            child: CustomPaint(
+              painter: LinePainter(
+                turnedOn: _lightSwitchNotifier.value,
+                screenSize: size,
+                isDark: isDark,
+                angle: _angleNotifier.value,
+                roomLight: _roomLightNotifier.value,
+                image: _image,
+              ),
+              size: size,
+            ),
+          );
+        },
       ),
     );
   }
@@ -182,14 +193,17 @@ class _HomeState extends State<Home> {
       left: 0,
       right: 0,
       child: Center(
-        child: FloatingNav(
-          isRoomLightOn: _roomLight,
-          onRoomLightToggle: () {
-            setState(() {
-              _roomLight = !_roomLight;
-            });
+        child: ValueListenableBuilder(
+          valueListenable: _roomLightNotifier,
+          builder: (context, roomLight, child) {
+            return FloatingNav(
+              isRoomLightOn: roomLight,
+              onRoomLightToggle: () {
+                _roomLightNotifier.value = !_roomLightNotifier.value;
+              },
+              onNavTap: _scrollToSection,
+            );
           },
-          onNavTap: _scrollToSection,
         ),
       ),
     );
@@ -241,14 +255,17 @@ class _HomeState extends State<Home> {
         const SizedBox(height: 40),
         GestureDetector(
           onTap: () {
-            setState(() {
-              _lightSwitch = !_lightSwitch;
-            });
+            _lightSwitchNotifier.value = !_lightSwitchNotifier.value;
           },
-          child: Icon(
-            _lightSwitch ? Icons.flashlight_on : Icons.flashlight_off,
-            color: textColor,
-            size: 40,
+          child: ValueListenableBuilder(
+            valueListenable: _lightSwitchNotifier,
+            builder: (context, lightOn, child) {
+              return Icon(
+                lightOn ? Icons.flashlight_on : Icons.flashlight_off,
+                color: textColor,
+                size: 40,
+              );
+            },
           ),
         ),
       ],
@@ -369,6 +386,19 @@ class _HomeState extends State<Home> {
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: textColor,
+              ),
+            ),
+            const SizedBox(height: 30),
+            ElevatedButton.icon(
+              onPressed: () => launchUrl(Uri.parse('Tauqeer_Ahmed_Resume.pdf')),
+              icon: const Icon(Icons.download),
+              label: const Text('DOWNLOAD CV'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: textColor,
+                foregroundColor: color,
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+                textStyle: GoogleFonts.sora(fontWeight: FontWeight.bold),
               ),
             ),
             const SizedBox(height: 30),
