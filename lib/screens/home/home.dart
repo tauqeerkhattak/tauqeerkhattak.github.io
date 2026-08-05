@@ -82,7 +82,7 @@ class _HomeState extends State<Home> {
     );
   }
 
-  void _scrollToSection(String label) {
+  Future<void> _scrollToSection(String label) async {
     GlobalKey key;
     switch (label) {
       case 'HOME':
@@ -102,11 +102,17 @@ class _HomeState extends State<Home> {
     }
 
     final context = key.currentContext;
+    log('CONTENT: $label ${context == null}');
     if (context != null) {
       Scrollable.ensureVisible(
         context,
         duration: const Duration(milliseconds: 800),
         curve: Curves.easeInOutCubic,
+      );
+      final name = ResponsiveBreakpoints.of(context).breakpoint.name;
+      await _analytics.logEvent(
+        name: 'HeaderEvent',
+        parameters: {'sizeName': name ?? ''},
       );
     }
   }
@@ -136,24 +142,20 @@ class _HomeState extends State<Home> {
       mobile: 20.0,
     );
 
-    return ListView(
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
       controller: _scrollController,
-      children: [
-        _buildHeroSection(color, key: _homeKey),
-        Padding(
-          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildSummarySection(color),
-              _buildExperienceSection(color, key: _experienceKey),
-              _buildProjectsSection(color, key: _projectsKey),
-              _buildEducationSection(color),
-              _buildFooter(color, key: _connectKey),
-            ],
-          ),
-        ),
-      ],
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildHeroSection(color),
+          _buildSummarySection(color),
+          _buildExperienceSection(color, key: _experienceKey),
+          _buildProjectsSection(color, key: _projectsKey),
+          _buildEducationSection(color),
+          _buildFooter(color, key: _connectKey),
+        ],
+      ),
     );
   }
 
@@ -209,10 +211,10 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Widget _buildHeroSection(Color color, {Key? key}) {
+  Widget _buildHeroSection(Color color) {
     final size = MediaQuery.sizeOf(context);
     return Container(
-      key: key,
+      key: _homeKey,
       height: size.height,
       width: size.width,
       alignment: Alignment.center,
@@ -253,11 +255,11 @@ class _HomeState extends State<Home> {
           ),
         ),
         const SizedBox(height: 40),
-        GestureDetector(
-          onTap: () {
+        IconButton(
+          onPressed: () {
             _lightSwitchNotifier.value = !_lightSwitchNotifier.value;
           },
-          child: ValueListenableBuilder(
+          icon: ValueListenableBuilder(
             valueListenable: _lightSwitchNotifier,
             builder: (context, lightOn, child) {
               return Icon(
