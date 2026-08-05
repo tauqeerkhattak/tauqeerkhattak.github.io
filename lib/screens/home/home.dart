@@ -10,9 +10,13 @@ import 'package:responsive_framework/responsive_framework.dart';
 import 'package:tauqeer_portfolio/utils/context_utils.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../main.dart';
 import '../../utils/assets.dart';
+import '../../utils/constants.dart';
 import '../../utils/painters/line_painter.dart';
+import 'widgets/experience_card.dart';
+import 'widgets/floating_nav.dart';
+import 'widgets/project_card.dart';
+import 'widgets/section_title.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -25,7 +29,14 @@ class _HomeState extends State<Home> {
   double angle = 0;
   ui.Image? _image;
   bool _lightSwitch = true;
+  bool _roomLight = false;
   final _analytics = FirebaseAnalytics.instance;
+  final ScrollController _scrollController = ScrollController();
+
+  final GlobalKey _homeKey = GlobalKey();
+  final GlobalKey _experienceKey = GlobalKey();
+  final GlobalKey _projectsKey = GlobalKey();
+  final GlobalKey _connectKey = GlobalKey();
 
   @override
   void initState() {
@@ -45,8 +56,6 @@ class _HomeState extends State<Home> {
   }
 
   void _calculateAngle(Offset position) {
-    // Applying law of cosines to find angle between mouse position and lamp
-    // starting point.
     final screenSize = MediaQuery.sizeOf(context);
     final angle = _calculateAngleAtB(
       screenSize.height,
@@ -58,41 +67,50 @@ class _HomeState extends State<Home> {
         this.angle = angle;
       });
     }
-    return;
   }
 
   double _calculateAngleAtB(double screenHeight, double mouseX, double mouseY) {
-    // Vectors
-    double BAx = 0;
-    double BAy = -screenHeight;
-    double BCx = mouseX;
-    double BCy = mouseY - screenHeight;
-
-    // Dot product
-    double dotProduct = (BAx * BCx) + (BAy * BCy);
-
-    // Magnitudes
-    double magnitudeBA = math.sqrt(BAx * BAx + BAy * BAy);
-    double magnitudeBC = math.sqrt(BCx * BCx + BCy * BCy);
-
-    // Cosine of the angle
-    double cosTheta = dotProduct / (magnitudeBA * magnitudeBC);
-
-    // Angle in radians
-    double angleInRadians = math.acos(cosTheta);
-
-    // Convert to degrees
-    return angleInRadians;
+    // Pivot is bottom-left (0, screenHeight)
+    // We want the angle from the Up vector (0, -1)
+    // Using atan2(x, y) where x is horizontal offset and y is vertical offset (Up)
+    return math.atan2(mouseX, screenHeight - mouseY);
   }
 
   Future<void> _saveAnalyticsData() async {
     final name = ResponsiveBreakpoints.of(context).breakpoint.name;
     await _analytics.logEvent(
       name: 'ScreenSizeEvent',
-      parameters: {
-        'sizeName': name ?? '',
-      },
+      parameters: {'sizeName': name ?? ''},
     );
+  }
+
+  void _scrollToSection(String label) {
+    GlobalKey key;
+    switch (label) {
+      case 'HOME':
+        key = _homeKey;
+        break;
+      case 'EXPERIENCE':
+        key = _experienceKey;
+        break;
+      case 'PROJECTS':
+        key = _projectsKey;
+        break;
+      case 'CONNECT':
+        key = _connectKey;
+        break;
+      default:
+        return;
+    }
+
+    final context = key.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 800),
+        curve: Curves.easeInOutCubic,
+      );
+    }
   }
 
   @override
@@ -102,69 +120,232 @@ class _HomeState extends State<Home> {
       backgroundColor: color,
       body: MouseRegion(
         onHover: (event) => _calculateAngle(event.position),
-        child: _buildBody(color),
+        child: Stack(
+          children: [
+            _buildMainContent(color),
+            _buildFlashLightOverlay(),
+            _buildFloatingNavigation(),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildBody(Color color) {
-    final size = MediaQuery.sizeOf(context);
-    return Stack(
-      fit: StackFit.expand,
+  Widget _buildMainContent(Color color) {
+    final horizontalPadding = context.when(
+      desktop: MediaQuery.sizeOf(context).width * 0.2,
+      tablet: 50.0,
+      mobile: 20.0,
+    );
+
+    return ListView(
+      controller: _scrollController,
       children: [
-        _buildFlashLight(size),
-        _buildContent(color),
-        _buildThemeButton(color),
+        _buildHeroSection(color, key: _homeKey),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: horizontalPadding),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              _buildSummarySection(color),
+              _buildExperienceSection(color, key: _experienceKey),
+              _buildProjectsSection(color, key: _projectsKey),
+              _buildEducationSection(color),
+              _buildFooter(color, key: _connectKey),
+            ],
+          ),
+        ),
       ],
     );
   }
 
-  Column _buildContent(ui.Color color) {
-    final isMobile = ResponsiveBreakpoints.of(context).smallerOrEqualTo(TABLET);
+  Widget _buildFlashLightOverlay() {
+    final size = MediaQuery.sizeOf(context);
+    return IgnorePointer(
+      child: CustomPaint(
+        painter: LinePainter(
+          turnedOn: _lightSwitch,
+          screenSize: size,
+          isDark: Theme.of(context).brightness == ui.Brightness.dark,
+          angle: angle,
+          roomLight: _roomLight,
+          image: _image,
+        ),
+        size: size,
+      ),
+    );
+  }
+
+  Widget _buildFloatingNavigation() {
+    return Positioned(
+      top: 30,
+      left: 0,
+      right: 0,
+      child: Center(
+        child: FloatingNav(
+          isRoomLightOn: _roomLight,
+          onRoomLightToggle: () {
+            setState(() {
+              _roomLight = !_roomLight;
+            });
+          },
+          onNavTap: _scrollToSection,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildHeroSection(Color color, {Key? key}) {
+    final size = MediaQuery.sizeOf(context);
+    return Container(
+      key: key,
+      height: size.height,
+      width: size.width,
+      alignment: Alignment.center,
+      child: _buildHeroContent(color),
+    );
+  }
+
+  Widget _buildHeroContent(ui.Color color) {
+    final textColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           'TAUQEER',
           style: GoogleFonts.sora(
-            color: color,
+            color: textColor,
             fontWeight: FontWeight.w600,
-            fontSize: context.when(
-              desktop: 100,
-              tablet: 60,
-              mobile: 34,
-            ),
-            shadows: [
-              Shadow(
-                color: color.withOpacity(0.8),
-                blurRadius: 5,
-                offset: isMobile ? Offset(3, 3) : Offset(5, 5),
-              )
-            ],
+            fontSize: context.when(desktop: 100, tablet: 60, mobile: 34),
           ),
         ),
+        const SizedBox(height: 10),
         MouseRegion(
           cursor: SystemMouseCursors.click,
           child: GestureDetector(
-            onTap: () {
-              launchUrl(
-                Uri.parse('https://github.com/tauqeerkhattak'),
-              );
-            },
+            onTap: () =>
+                launchUrl(Uri.parse('https://github.com/tauqeerkhattak')),
             child: Text(
               '<github.com/tauqeerkhattak/>',
               style: GoogleFonts.sora(
-                color: color,
+                color: textColor.withValues(alpha: 0.7),
                 fontWeight: FontWeight.w600,
-                fontSize: context.when(desktop: 30, tablet: 25, mobile: 18),
-                shadows: [
-                  Shadow(
-                    color: color.withValues(alpha: 0.8),
-                    blurRadius: 5,
-                    offset: isMobile ? Offset(2, 2) : Offset(3, 3),
-                  ),
-                ],
+                fontSize: context.when(desktop: 24, tablet: 20, mobile: 16),
               ),
+            ),
+          ),
+        ),
+        const SizedBox(height: 40),
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _lightSwitch = !_lightSwitch;
+            });
+          },
+          child: Icon(
+            _lightSwitch ? Icons.flashlight_on : Icons.flashlight_off,
+            color: textColor,
+            size: 40,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSummarySection(Color color) {
+    final textColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionTitle(title: 'SUMMARY'),
+        Text(
+          Constants.summary,
+          style: GoogleFonts.sourceCodePro(
+            fontSize: context.when(desktop: 18, tablet: 16, mobile: 15),
+            height: 1.6,
+            color: textColor.withValues(alpha: 0.8),
+          ),
+        ),
+        const SizedBox(height: 30),
+        Wrap(
+          spacing: 15,
+          runSpacing: 10,
+          children:
+              Assets.technologies.map((tech) => _buildTechChip(tech)).toList(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildTechChip(String techAsset) {
+    final color = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.05),
+        border: Border.all(color: color.withValues(alpha: 0.1)),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Text(
+        techAsset.split('/').last.split('.').first.toUpperCase(),
+        style: GoogleFonts.sourceCodePro(
+          fontSize: 14,
+          fontWeight: FontWeight.bold,
+          color: color,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildExperienceSection(Color color, {Key? key}) {
+    return Column(
+      key: key,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionTitle(title: 'EXPERIENCE'),
+        ...Constants.experiences.map((exp) => ExperienceCard(experience: exp)),
+      ],
+    );
+  }
+
+  Widget _buildProjectsSection(Color color, {Key? key}) {
+    return Column(
+      key: key,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionTitle(title: 'PROJECTS'),
+        ...Constants.projects.map((project) => ProjectCard(project: project)),
+      ],
+    );
+  }
+
+  Widget _buildEducationSection(Color color) {
+    final textColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionTitle(title: 'EDUCATION'),
+        Container(
+          padding: const EdgeInsets.all(24),
+          decoration: BoxDecoration(
+            color: textColor.withValues(alpha: 0.05),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Text(
+            Constants.education,
+            style: GoogleFonts.sourceCodePro(
+              fontSize: context.when(desktop: 18, tablet: 16, mobile: 15),
+              height: 1.8,
+              color: textColor.withValues(alpha: 0.8),
             ),
           ),
         ),
@@ -172,64 +353,61 @@ class _HomeState extends State<Home> {
     );
   }
 
-  Transform _buildFlashLight(ui.Size size) {
-    final theme = Theme.of(context).brightness;
-    return Transform.rotate(
-      angle: angle,
-      alignment: Alignment.bottomLeft,
-      origin: Offset.zero,
-      child: GestureDetector(
-        onTap: () {
-          setState(() {
-            _lightSwitch = !_lightSwitch;
-          });
-          _analytics.logEvent(
-            name: 'TorchEvent',
-            parameters: {
-              'status': _lightSwitch,
-            },
-          );
-        },
-        child: CustomPaint(
-          painter: LinePainter(
-            turnedOn: _lightSwitch,
-            image: _image,
-            isDark: theme == ui.Brightness.dark,
-            size: size,
-          ),
-          size: size,
+  Widget _buildFooter(Color color, {Key? key}) {
+    final textColor = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black;
+    return Padding(
+      key: key,
+      padding: const EdgeInsets.symmetric(vertical: 80),
+      child: Center(
+        child: Column(
+          children: [
+            Text(
+              'Let\'s connect!',
+              style: GoogleFonts.sora(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: textColor,
+              ),
+            ),
+            const SizedBox(height: 30),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                _buildSocialIcon(Icons.email, Constants.email),
+                _buildSocialIcon(Icons.link, Constants.linkedin),
+                _buildSocialIcon(Icons.code, Constants.githubUri),
+              ],
+            ),
+            const SizedBox(height: 60),
+            Text(
+              '© 2026 TAUQEER AHMED',
+              style: GoogleFonts.sourceCodePro(
+                fontSize: 12,
+                color: textColor.withValues(alpha: 0.4),
+                letterSpacing: 2,
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-  Widget _buildThemeButton(Color color) {
-    final isDark = Theme.of(context).brightness == ui.Brightness.dark;
-    return Positioned(
-      right: 10,
-      top: 10,
+  Widget _buildSocialIcon(IconData icon, String url) {
+    final color = Theme.of(context).brightness == Brightness.dark
+        ? Colors.white
+        : Colors.black;
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 10),
+      decoration: BoxDecoration(
+        shape: BoxShape.circle,
+        border: Border.all(color: color.withValues(alpha: 0.2)),
+      ),
       child: IconButton(
-        onPressed: () {
-          if (isDark) {
-            themeNotifier.value = ui.Brightness.light;
-          } else {
-            themeNotifier.value = ui.Brightness.dark;
-          }
-          _analytics.logEvent(
-            name: 'ThemeChangeEvent',
-            parameters: {
-              'theme': isDark ? ui.Brightness.dark : ui.Brightness.light,
-            },
-          );
-        },
-        style: ElevatedButton.styleFrom(
-          elevation: 10,
-        ),
-        icon: Icon(
-          isDark ? Icons.light_mode : Icons.dark_mode,
-          size: 30,
-          color: color,
-        ),
+        onPressed: () => launchUrl(Uri.parse(url)),
+        icon: Icon(icon, color: color, size: 28),
       ),
     );
   }

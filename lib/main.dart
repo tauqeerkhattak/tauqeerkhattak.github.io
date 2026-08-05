@@ -7,8 +7,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 
 import 'firebase_options.dart';
-import 'screens/beenit/beenit_deletion_steps.dart';
-import 'screens/beenit/privacy_policy.dart';
 import 'screens/home/home.dart';
 
 final themeNotifier = ValueNotifier<Brightness>(Brightness.dark);
@@ -40,8 +38,6 @@ class Portfolio extends StatelessWidget {
           navigatorKey: navigatorKey,
           title: 'Tauqeer Ahmed',
           routes: {
-            '/beenit/deletion-steps': (_) => BeenItDeletionSteps(),
-            '/beenit/privacy-policy': (_) => BeenItPrivacyPolicy(),
             '/': (_) => const Home(),
           },
           initialRoute: '/',

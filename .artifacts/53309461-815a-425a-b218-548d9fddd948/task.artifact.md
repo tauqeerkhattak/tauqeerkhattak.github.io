@@ -1,0 +1,7 @@
+- `[x]` Refactor `LinePainter` for global masking
+- `[x]` Update `Home` with global flashlight and scroll-aware logic
+- `[x]` Create `FloatingNav` widget
+- `[x]` Implement "Room Light" toggle
+- `[x]` Update `ProjectCard` to Glassmorphism style
+- `[x]` Add section anchors and smooth scrolling
+- `[x]` Verify interactivity through the mask
