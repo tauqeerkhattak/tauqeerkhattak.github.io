@@ -13,7 +13,7 @@ dependencies:
     sdk: flutter
   # FIREBASE STUFF
   firebase_core: ^4.12.1
-  firebase_analytics: ^12.4.6
+  firebase_analytics: ^13.0.0
 
   cupertino_icons: ^1.0.9
   url_launcher: ^6.3.2
