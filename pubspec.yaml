@@ -17,7 +17,7 @@ dependencies:
 
   cupertino_icons: ^1.0.9
   url_launcher: ^6.3.2
-  google_fonts: ^8.2.1
+  google_fonts: ^9.0.0
   auto_size_text: ^3.0.0
   flutter_native_splash: ^2.4.8
   responsive_framework: ^1.5.1
